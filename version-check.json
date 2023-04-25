@@ -1,0 +1,13 @@
+{
+	"homepage": "https://www.curseforge.com/minecraft/mc-mods/toms-trading-network",
+	"promos": {
+		"1.19.2-latest": "0.1.0",
+		"1.19.4-latest": "0.1.0"
+	},
+	"1.19.2": {
+		"0.1.0": "First Release"
+	},
+	"1.19.4": {
+		"0.1.0": "First Release"
+	}
+}
