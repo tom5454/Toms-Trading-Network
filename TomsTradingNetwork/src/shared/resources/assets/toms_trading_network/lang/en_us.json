@@ -1,6 +1,8 @@
 {
 	"block.toms_trading_network.vending_machine": "Vending Machine",
 	
+	"item.toms_trading_network.tag_filter": "Matches Tag:",
+	
 	"itemGroup.toms_trading_network.tab": "Tom's Trading Network",
 	
 	"tooltip.toms_trading_network.hold_shift_for_info": "Hold SHIFT for more info.",
@@ -14,6 +16,11 @@
 	"tooltip.toms_trading_network.side_config1": "Insert Only",
 	"tooltip.toms_trading_network.side_config2": "Extract Only",
 	"tooltip.toms_trading_network.side_config3": "Insert & Extract",
+	"tooltip.toms_trading_network.match_nbt": "Match NBT: %s",
+	"tooltip.toms_trading_network.textfield": "%s: %s",
+	"tooltip.toms_trading_network.item_count": "Item count",
+	"tooltip.toms_trading_network.ignoredNBT": "Accepts matching item with any NBT data",
+	"tooltip.toms_trading_network.to_tag_filter": "Convert to tag filter",
 	
 	"narrator.toms_trading_network.vending_machine_name": "Vending Machine Name",
 	"narrator.toms_trading_network.vending_machine.trade_amount": "Trade Amount",

@@ -24,6 +24,7 @@ archivesBaseName = 'toms_trading_network-1.19.4'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+def useLib = System.getProperty("useLib")
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -59,6 +60,9 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 toms_trading_network {
@@ -76,6 +80,9 @@ minecraft {
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
+            
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             // Recommended logging level for the console
             // You can set various levels here.
@@ -98,6 +105,9 @@ minecraft {
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
+            
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             // Recommended logging level for the console
             // You can set various levels here.
@@ -126,6 +136,7 @@ sourceSets {
 			srcDir "../TomsTradingNetwork/src/shared/java"
 			srcDir "../TomsTradingNetwork/src/loader-shared/java"
 			srcDir "src/platform-shared/java"
+			if(!useLib)exclude "com/tom/trading/rei/**"
 		}
 		resources {
 			srcDir "../TomsTradingNetwork/src/shared/resources"
@@ -155,6 +166,8 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.architectury.dev/" }
 }
 
 dependencies {
@@ -186,6 +199,14 @@ dependencies {
   	
   	implementation fg.deobf("curse.maven:the-one-probe-245211:4442439")
   	implementation fg.deobf("curse.maven:jade-324717:4439089")
+  	
+  	if(useLib) {
+    	compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:11.0.597")
+		compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:11.0.597")
+		implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:11.0.597")
+		implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:10.0.96")
+    	implementation fg.deobf("dev.architectury:architectury-forge:8.1.73")
+    }
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

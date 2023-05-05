@@ -18,11 +18,11 @@ import com.tom.trading.tile.VendingMachineBlockEntityBase;
 import com.tom.trading.util.DataSlots;
 import com.tom.trading.util.IDataReceiver;
 
-public class VendingMachineConfigMenu extends AbstractContainerMenu implements IDataReceiver {
+public class VendingMachineConfigMenu extends AbstractFilteredMenu implements IDataReceiver {
 	private VendingMachineBlockEntityBase machine;
 	protected final Inventory pinv;
 
-	public int inputCfg, outputCfg;
+	public int inputCfg, outputCfg, matchNBT;
 	public Runnable updateGui;
 
 	public VendingMachineConfigMenu(int pContainerId, Inventory pPlayerInventory) {
@@ -30,6 +30,7 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 
 		addDataSlot(DataSlots.set(c -> inputCfg = c).onUpdate(this::updateGui));
 		addDataSlot(DataSlots.set(c -> outputCfg = c).onUpdate(this::updateGui));
+		addDataSlot(DataSlots.set(c -> matchNBT = c));
 	}
 
 	public VendingMachineConfigMenu(int pContainerId, Inventory pPlayerInventory, VendingMachineBlockEntityBase machine) {
@@ -38,10 +39,11 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 
 		addDataSlot(DataSlots.get(machine::getInputSides));
 		addDataSlot(DataSlots.get(machine::getOutputSides));
+		addDataSlot(DataSlots.get(machine::getMatchNBT));
 	}
 
 	private VendingMachineConfigMenu(int pContainerId, Inventory pPlayerInventory, Container input, Container output, Container config) {
-		super(Content.VENDING_MACHINE_CONFIG_MENU.get(), pContainerId);
+		super(Content.VENDING_MACHINE_CONFIG_MENU.get(), pContainerId, pPlayerInventory);
 		this.pinv = pPlayerInventory;
 
 		for(int i = 0; i < 4; ++i) {
@@ -60,7 +62,7 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 					public boolean mayPlace(ItemStack pStack) {
 						for (int i = 0; i < 4; i++) {
 							ItemStack o = config.getItem(i + 4).copy();
-							if(ItemStack.isSameItemSameTags(o, pStack)) {
+							if(compareItemStack(o, pStack, i + 4)) {
 								return true;
 							}
 						}
@@ -93,6 +95,10 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 		}
 	}
 
+	public boolean compareItemStack(ItemStack pStack, ItemStack pOther, int slot) {
+		return ItemStack.isSame(pStack, pOther) && ((matchNBT & (1 << slot)) == 0 || ItemStack.tagMatches(pStack, pOther));
+	}
+
 	@Override
 	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -112,7 +118,7 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 				boolean in = false;
 				for (int i = 0; i < 4; i++) {
 					ItemStack o = this.slots.get(i + 4).getItem().copy();
-					if(ItemStack.isSameItemSameTags(o, slot.getItem())) {
+					if(compareItemStack(o, slot.getItem(), i + 4)) {
 						in = true;
 						break;
 					}
@@ -157,6 +163,11 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 				}
 			});
 			return true;
+		} else if((pId & 0b0110_0000) != 0) {
+			int slot = pId & 0xf;
+			boolean c = (pId & 0b0001_0000) != 0;
+			machine.setMatchNBT(slot, c);
+			return true;
 		} else if((pId & 0b0010_0000) != 0) {
 			int c = pId & 0b11;
 			int id = (pId >> 2) & 0b111;
@@ -182,6 +193,18 @@ public class VendingMachineConfigMenu extends AbstractContainerMenu implements I
 		}
 		if(tag.contains("setName")) {
 			machine.setCustomName(Component.literal(tag.getString("setName")));
+		}
+		if(tag.contains("setPhantom")) {
+			CompoundTag t = tag.getCompound("setPhantom");
+			int slotId = t.getInt("id");
+			ItemStack item = ItemStack.of(t.getCompound("item"));
+			Slot slot = slotId > -1 && slotId < slots.size() ? slots.get(slotId) : null;
+			if (slot instanceof PhantomSlot) {
+				if(!item.isEmpty()) {
+					item.setCount(1);
+					slot.set(item);
+				}
+			}
 		}
 	}
 

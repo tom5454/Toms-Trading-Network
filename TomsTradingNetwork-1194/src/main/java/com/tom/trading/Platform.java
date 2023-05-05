@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -58,5 +60,9 @@ public class Platform {
 
 	public static <M extends AbstractContainerMenu> MenuType<M> createMenuType(MenuSupplier<M> create) {
 		return new MenuType<>(create, FeatureFlags.VANILLA_SET);
+	}
+
+	public static TagKey<Item> getItemTag(ResourceLocation name) {
+		return ItemTags.create(name);
 	}
 }

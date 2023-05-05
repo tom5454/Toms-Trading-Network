@@ -3,6 +3,7 @@ package com.tom.trading;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.MenuType.MenuSupplier;
@@ -33,5 +34,9 @@ public class Platform {
 
 	public static <M extends AbstractContainerMenu> MenuType<M> createMenuType(MenuSupplier<M> create) {
 		return new MenuType<>(create);
+	}
+
+	public static TagKey<Item> getItemTag(ResourceLocation name) {
+		return TagKey.create(Registry.ITEM_REGISTRY, name);
 	}
 }

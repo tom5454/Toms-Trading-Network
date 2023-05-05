@@ -24,6 +24,15 @@
 		],
 		"jade": [
 			"com.tom.trading.jade.JadePlugin"
+		],
+		"rei_client": [
+    		"com.tom.trading.rei.REIPlugin"
+    	],
+    	"emi": [
+    		"com.tom.trading.emi.EMIPlugin"
+    	],
+    	"jei_mod_plugin": [
+			"com.tom.trading.jei.JEIHandler"
 		]
 	},
 	"mixins": [

@@ -5,7 +5,9 @@ import java.util.List;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -42,5 +44,9 @@ public class Platform {
 
 	public static <M extends AbstractContainerMenu> MenuType<M> createMenuType(MenuSupplier<M> create) {
 		return new MenuType<>(create, FeatureFlags.VANILLA_SET);
+	}
+
+	public static TagKey<Item> getItemTag(ResourceLocation name) {
+		return TagKey.create(Registries.ITEM, name);
 	}
 }

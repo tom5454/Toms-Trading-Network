@@ -15,4 +15,12 @@ public abstract class PlatformContainerScreen<T extends AbstractContainerMenu> e
 	public Slot getSlotUnderMouse() {
 		return hoveredSlot;
 	}
+
+	public int getGuiLeft() {
+		return leftPos;
+	}
+
+	public int getGuiTop() {
+		return topPos;
+	}
 }

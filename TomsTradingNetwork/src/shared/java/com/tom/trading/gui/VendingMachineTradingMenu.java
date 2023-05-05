@@ -15,13 +15,14 @@ import com.tom.trading.util.DataSlots;
 
 public class VendingMachineTradingMenu extends AbstractContainerMenu {
 	private VendingMachineBlockEntityBase machine;
-	public int state;
+	public int state, matchNBT;
 	public Runnable updateGui;
 
 	public VendingMachineTradingMenu(int pContainerId, Inventory pPlayerInventory) {
 		this(pContainerId, pPlayerInventory, new SimpleContainer(8));
 
 		addDataSlot(DataSlots.set(c -> state = c).onUpdate(this::updateGui));
+		addDataSlot(DataSlots.set(c -> matchNBT = c));
 	}
 
 	public VendingMachineTradingMenu(int pContainerId, Inventory pPlayerInventory, VendingMachineBlockEntityBase machine) {
@@ -29,6 +30,7 @@ public class VendingMachineTradingMenu extends AbstractContainerMenu {
 		this.machine = machine;
 
 		addDataSlot(DataSlots.get(machine::getTradingState));
+		addDataSlot(DataSlots.get(machine::getMatchNBT));
 	}
 
 	private VendingMachineTradingMenu(int pContainerId, Inventory pPlayerInventory, Container config) {

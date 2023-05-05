@@ -1,14 +1,17 @@
 package com.tom.trading.gui;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import com.tom.trading.TradingNetworkMod;
+import com.tom.trading.TradingNetworkModClient;
 
 public class VendingMachineTradingScreen extends PlatformContainerScreen<VendingMachineTradingMenu> {
 	private static final ResourceLocation gui = new ResourceLocation(TradingNetworkMod.MODID, "textures/gui/vending_machine_trading.png");
@@ -57,6 +60,13 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 	public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 		this.renderBackground(pPoseStack);
 		super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+		Slot s = getSlotUnderMouse();
+		if(s != null && s.getContainerSlot() < 8) {
+			if((menu.matchNBT & (1 << s.getContainerSlot())) == 0) {
+				TradingNetworkModClient.setTooltip(Component.translatable("tooltip.toms_trading_network.ignoredNBT").withStyle(ChatFormatting.WHITE));
+			}
+		}
 		this.renderTooltip(pPoseStack, pMouseX, pMouseY);
+		TradingNetworkModClient.setTooltip();
 	}
 }

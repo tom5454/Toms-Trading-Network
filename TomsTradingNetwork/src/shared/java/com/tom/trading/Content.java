@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplie
 import com.tom.trading.block.VendingMachineBlock;
 import com.tom.trading.gui.VendingMachineConfigMenu;
 import com.tom.trading.gui.VendingMachineTradingMenu;
+import com.tom.trading.item.TagFilterItem;
 import com.tom.trading.tile.VendingMachineBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
 import com.tom.trading.util.GameObject;
@@ -22,6 +23,7 @@ import com.tom.trading.util.GameObject.GameObjectBlockEntity;
 
 public class Content {
 	public static final GameObject<VendingMachineBlock> VENDING_MACHINE = blockWithItem("vending_machine", VendingMachineBlock::new);
+	public static final GameObject<TagFilterItem> TAG_FILTER = Platform.ITEMS.register("tag_filter", TagFilterItem::new);
 
 	public static final GameObjectBlockEntity<VendingMachineBlockEntityBase> VENDING_MACHINE_TILE = blockEntity("vending_machine.tile", VendingMachineBlockEntity::new, VENDING_MACHINE);
 

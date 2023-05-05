@@ -24,6 +24,7 @@ archivesBaseName = 'toms_trading_network-1.19'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+def useLib = System.getProperty("useLib")
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -59,6 +60,9 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 toms_trading_network {
@@ -81,6 +85,9 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 toms_trading_network {
@@ -103,6 +110,9 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'toms_trading_network', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/'), '--existing', file('src/platform-shared/resources/')
@@ -126,6 +136,7 @@ sourceSets {
 			srcDir "src/shared/java"
 			srcDir "src/loader-shared/java"
 			srcDir "src/platform-shared/java"
+			if(!useLib)exclude "com/tom/trading/rei/**"
 		}
 		resources {
 			srcDir "src/shared/resources"
@@ -155,6 +166,13 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+    	// location of the maven that hosts JEI files since January 2023
+    	name = "Jared's maven"
+    	url = "https://maven.blamejared.com/"
+	}
+	maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.architectury.dev/" }
 }
 
 dependencies {
@@ -179,13 +197,21 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.2.0.256")
-    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:11.2.0.256")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.6.0.1013")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:11.6.0.1013")
   	// at runtime, use the full JEI jar
-  	runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.2.0.256")
+  	runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.6.0.1013")
   	
   	implementation fg.deobf("curse.maven:the-one-probe-245211:3965693")
   	implementation fg.deobf("curse.maven:jade-324717:4433884")
+  	
+  	if(useLib) {
+    	compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:9.1.587")
+		compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:9.1.587")
+		implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:9.1.587")
+		implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:8.2.88")
+    	implementation fg.deobf("dev.architectury:architectury-forge:6.4.62")
+    }
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

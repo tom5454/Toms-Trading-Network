@@ -8,6 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.MenuProvider;
@@ -15,10 +17,12 @@ import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.tom.trading.Content;
+import com.tom.trading.Platform;
 import com.tom.trading.block.VendingMachineBlock;
 import com.tom.trading.gui.VendingMachineConfigMenu;
 import com.tom.trading.gui.VendingMachineTradingMenu;
@@ -30,13 +34,14 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	private BasicContainer inputs = new BasicContainer(8);
 	private BasicContainer outputs = new BasicContainer(8);
 
-	private int inputSides, outputSides;
+	private int inputSides, outputSides, matchNBT = 0xff;
 	private Component name;
 	private Boolean hasInputs;
 
 	public VendingMachineBlockEntityBase(BlockPos pPos, BlockState pBlockState) {
 		super(Content.VENDING_MACHINE_TILE.get(), pPos, pBlockState);
 		inputs.addListener(c -> hasInputs = null);
+		config.addListener(c -> hasInputs = null);
 		ContainerListener l = c -> setChanged();
 		config.addListener(l);
 		inputs.addListener(l);
@@ -51,6 +56,7 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		config.fromTag(pTag.getList("Config", Tag.TAG_COMPOUND));
 		inputSides = pTag.getInt("inputSides");
 		outputSides = pTag.getInt("outputSides");
+		matchNBT = pTag.contains("matchNBT") ? pTag.getInt("matchNBT") : 0xff;
 		if (pTag.contains("CustomName", 8)) {
 			this.name = Component.Serializer.fromJson(pTag.getString("CustomName"));
 		}
@@ -64,6 +70,7 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		pTag.put("Config", config.createTag());
 		pTag.putInt("inputSides", inputSides);
 		pTag.putInt("outputSides", outputSides);
+		pTag.putInt("matchNBT", matchNBT);
 		if (this.name != null) {
 			pTag.putString("CustomName", Component.Serializer.toJson(this.name));
 		}
@@ -77,11 +84,11 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		return outputs;
 	}
 
-	public Runnable consumeInputs() {
-		return consumeInputs(inputs, 4);
+	public Runnable consumeInputs(List<ItemStack> items) {
+		return consumeInputs(inputs, 4, items);
 	}
 
-	public Runnable consumeInputs(Container inputs, int start) {
+	public Runnable consumeInputs(Container inputs, int start, List<ItemStack> items) {
 		ItemStack[] modArray = new ItemStack[inputs.getContainerSize()];
 		for (int i = 0; i < modArray.length; i++) {
 			modArray[i] = inputs.getItem(i).copy();
@@ -93,12 +100,12 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 			if(rem > 0) {
 				for(int j = 0;j < modArray.length; j++) {
 					ItemStack s = modArray[j];
-					if(!s.isEmpty() && ItemStack.isSameItemSameTags(s, o)) {
+					if(!s.isEmpty() && compareItemStack(s, o, i + start)) {
 						int d = Math.min(rem, s.getCount());
 						final int fj = j;
 						actions.add(() -> inputs.removeItem(fj, d));
 						rem -= d;
-						s.shrink(d);
+						items.add(s.split(d));
 						if(rem < 1)break;
 					}
 				}
@@ -108,31 +115,21 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		return () -> actions.forEach(Runnable::run);
 	}
 
-	public Runnable addOutput() {
-		return addOutput(outputs, 0);
+	public Runnable addOutput(List<ItemStack> items) {
+		return addOutput(outputs, items);
 	}
 
-	public Runnable refundInput() {
-		return addOutput(outputs, 4);
-	}
-
-	private Runnable addOutput(Container outputs, int start) {
+	private Runnable addOutput(Container outputs, List<ItemStack> items) {
 		ItemStack[] modArray = new ItemStack[outputs.getContainerSize()];
 		for (int i = 0; i < modArray.length; i++) {
 			modArray[i] = outputs.getItem(i).copy();
 		}
 		List<Runnable> actions = new ArrayList<>();
-		for (int i = 0; i < 4; i++) {
-			ItemStack o = config.getItem(i + start).copy();
+		for (int i = 0; i < items.size(); i++) {
+			ItemStack o = items.get(i).copy();
 			for (int j = 0; j < modArray.length; j++) {
-				ItemStack s = modArray[j];
-				if(modArray[j].isEmpty()) {
-					ItemStack s2 = o.copy();
-					modArray[j] = s2;
-					o.setCount(0);
-					final int fj = j;
-					actions.add(() -> outputs.setItem(fj, s2));
-				} else if(ItemStack.isSameItemSameTags(o, modArray[j])) {
+				if(ItemStack.isSameItemSameTags(o, modArray[j])) {
+					ItemStack s = modArray[j];
 					int m = Math.min(outputs.getMaxStackSize(), o.getMaxStackSize());
 					int c = Math.min(o.getCount(), m - s.getCount());
 					if(c > 0) {
@@ -143,6 +140,17 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 					}
 				}
 				if(o.isEmpty())break;
+			}
+			if(!o.isEmpty()) {
+				for (int j = 0; j < modArray.length; j++) {
+					if(modArray[j].isEmpty()) {
+						ItemStack s2 = o.copy();
+						modArray[j] = s2;
+						o.setCount(0);
+						final int fj = j;
+						actions.add(() -> outputs.setItem(fj, s2));
+					}
+				}
 			}
 			if(!o.isEmpty())return null;
 		}
@@ -157,12 +165,25 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 			if(stack.isEmpty())return true;
 			for (int i = 0; i < 4; i++) {
 				ItemStack o = config.getItem(i + 4).copy();
-				if(ItemStack.isSameItemSameTags(o, stack)) {
+				if(compareItemStack(stack, o, i + 4)) {
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public boolean compareItemStack(ItemStack stack, ItemStack template, int slot) {
+		if(template.getItem() == Content.TAG_FILTER.get()) {
+			if(!template.hasTag() || !template.getTag().contains("tag", Tag.TAG_STRING))return false;
+			try {
+				TagKey<Item> tag = Platform.getItemTag(new ResourceLocation(template.getTag().getString("tag")));
+				return stack.is(tag);
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		return ItemStack.isSame(stack, template) && ((matchNBT & (1 << slot)) == 0 || ItemStack.tagMatches(stack, template));
 	}
 
 	public boolean canOutput(Direction dir) {
@@ -221,8 +242,12 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		return outputSides;
 	}
 
+	public int getMatchNBT() {
+		return matchNBT;
+	}
+
 	public int getTradingState() {
-		if(hasInputs == null)hasInputs = consumeInputs() != null;
+		if(hasInputs == null)hasInputs = consumeInputs(new ArrayList<>()) != null;
 		return hasInputs ? 1 : 0;
 	}
 
@@ -234,14 +259,21 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		setChanged();
 	}
 
+	public void setMatchNBT(int slot, boolean config) {
+		if(config)matchNBT |= (1 << slot);
+		else matchNBT &=~ (1 << slot);
+	}
+
 	public int tradeWith(Container c) {
-		Runnable commitGetPlayer = consumeInputs(c, 0);
+		List<ItemStack> playerItems = new ArrayList<>();
+		List<ItemStack> machineItems = new ArrayList<>();
+		Runnable commitGetPlayer = consumeInputs(c, 0, playerItems);
 		if(commitGetPlayer == null)return 1;
-		Runnable commitGetInv = consumeInputs();
+		Runnable commitGetInv = consumeInputs(machineItems);
 		if(commitGetInv == null)return 2;
-		Runnable commitGive = addOutput(c, 4);
+		Runnable commitGive = addOutput(c, machineItems);
 		if(commitGive == null)return 3;
-		Runnable commitStore = addOutput();
+		Runnable commitStore = addOutput(playerItems);
 		if(commitStore == null)return 4;
 		commitGetPlayer.run();
 		commitGetInv.run();
