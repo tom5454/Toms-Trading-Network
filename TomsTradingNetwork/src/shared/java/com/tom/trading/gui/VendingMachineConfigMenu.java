@@ -163,12 +163,12 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 				}
 			});
 			return true;
-		} else if((pId & 0b0110_0000) != 0) {
+		} else if((pId & 0b0110_0000) == 0b0110_0000) {
 			int slot = pId & 0xf;
 			boolean c = (pId & 0b0001_0000) != 0;
 			machine.setMatchNBT(slot, c);
 			return true;
-		} else if((pId & 0b0010_0000) != 0) {
+		} else if((pId & 0b0010_0000) == 0b0010_0000) {
 			int c = pId & 0b11;
 			int id = (pId >> 2) & 0b111;
 			machine.setSides(id, c);
