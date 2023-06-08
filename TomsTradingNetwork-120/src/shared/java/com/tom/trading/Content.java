@@ -42,7 +42,7 @@ public class Content {
 	}
 
 	private static <I extends Item> GameObject<I> item(String name, Supplier<I> fact) {
-		return Platform.ITEMS.register(name, () -> Platform.registerItem(fact.get()));
+		return Platform.ITEMS.register(name, () -> Platform.addItemToTab(fact.get()));
 	}
 
 	@SuppressWarnings("unchecked")
