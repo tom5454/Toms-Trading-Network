@@ -1,6 +1,7 @@
 package com.tom.trading.jei;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.Rect2i;
@@ -11,19 +12,26 @@ import com.tom.trading.gui.AbstractFilteredMenu;
 import com.tom.trading.gui.AbstractFilteredScreen;
 import com.tom.trading.gui.PhantomSlot;
 
-@SuppressWarnings("rawtypes")
-public class JeiGhostIngredientHandler implements JeiGhostIngredientHandlerPlatform<AbstractFilteredScreen> {
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
+import mezz.jei.api.ingredients.ITypedIngredient;
 
-	@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
+public class JeiGhostIngredientHandler implements IGhostIngredientHandler<AbstractFilteredScreen> {
+
 	@Override
-	public List<Target<ItemStack>> getTargets(AbstractFilteredScreen gui, ItemStack stack, boolean doStart) {
-		List<Target<ItemStack>> targets = new ArrayList<>();
-		for (Slot slot : gui.getMenu().slots) {
-			if (slot instanceof PhantomSlot) {
-				targets.add(new SlotTarget(gui, slot));
+	@SuppressWarnings("unchecked")
+	public <I> List<Target<I>> getTargetsTyped(AbstractFilteredScreen gui, ITypedIngredient<I> ingredient, boolean doStart) {
+		if (ingredient.getType() == VanillaTypes.ITEM_STACK) {
+			List<Target<ItemStack>> targets = new ArrayList<>();
+			for (Slot slot : gui.getMenu().slots) {
+				if (slot instanceof PhantomSlot) {
+					targets.add(new SlotTarget(gui, slot));
+				}
 			}
+			return (List) targets;
 		}
-		return targets;
+		return Collections.emptyList();
 	}
 
 

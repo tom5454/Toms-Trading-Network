@@ -93,9 +93,6 @@ sourceSets {
 			srcDir "../TomsTradingNetwork-120/src/shared/java"
 			srcDir "src/loader-shared/java"
 			srcDir "../TomsTradingNetwork-120/src/platform-shared/java"
-			exclude "com/tom/trading/jei/**"
-			exclude "com/tom/trading/emi/**"
-			exclude "com/tom/trading/jade/**"
 		}
 		resources {
 			srcDir "../TomsTradingNetwork-120/src/shared/resources"
@@ -118,11 +115,8 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
-	implementation "com.electronwill.night-config:core:3.6.3"
-    implementation "com.electronwill.night-config:toml:3.6.3"
-	//modImplementation("curse.maven:forge-config-api-port-fabric-547434:4451343")
 	
-	modImplementation("com.terraformersmc:modmenu:7.0.0-beta.2") {
+	modImplementation("com.terraformersmc:modmenu:7.0.1") {
         exclude(group: "net.fabricmc.fabric-api")
     }
     
@@ -139,15 +133,16 @@ dependencies {
         exclude(group: "dev.architectury")
     }
     modImplementation("dev.architectury:architectury-fabric:9.0.7")
-    //modImplementation "dev.emi:emi:0.7.1+1.19.4"
+    modCompileOnly "dev.emi:emi-fabric:1.0.2+1.20:api"
+	modLocalRuntime "dev.emi:emi-fabric:1.0.2+1.20"
     
-	/*// compile against the JEI API but do not include it at runtime
-	modCompileOnlyApi("mezz.jei:jei-1.19.4-common-api:13.0.0.1")
-	modCompileOnlyApi("mezz.jei:jei-1.19.4-fabric-api:13.0.0.1")
+	// compile against the JEI API but do not include it at runtime
+	modCompileOnlyApi("mezz.jei:jei-1.20-common-api:14.0.0.4")
+	modCompileOnlyApi("mezz.jei:jei-1.20-fabric-api:14.0.0.4")
 	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-1.19.4-fabric:13.0.0.1")
+	modRuntimeOnly("mezz.jei:jei-1.20-fabric:14.0.0.4")
 	
-	modImplementation ("curse.maven:jade-324717:4438356")*/
+	modImplementation ("curse.maven:jade-324717:4573047")
 }
 
 processResources {
