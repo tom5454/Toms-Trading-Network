@@ -91,13 +91,17 @@ sourceSets {
         }
 		java {
 			srcDir "../TomsTradingNetwork-120/src/shared/java"
-			srcDir "src/loader-shared/java"
-			srcDir "../TomsTradingNetwork-120/src/platform-shared/java"
+			srcDir "../TomsTradingNetworkFabric-120/src/loader-shared/java"
+			srcDir "../TomsTradingNetwork-1202/src/platform-shared/java"
+			exclude "com/tom/trading/jei/**"
+			exclude "com/tom/trading/rei/**"
+			exclude "com/tom/trading/emi/**"
+			exclude "com/tom/trading/jade/**"
 		}
 		resources {
 			srcDir "../TomsTradingNetwork-120/src/shared/resources"
-			srcDir "src/loader-shared/resources"
-			srcDir "../TomsTradingNetwork-120/src/platform-shared/resources"
+			srcDir "../TomsTradingNetworkFabric-120/src/loader-shared/resources"
+			srcDir "../TomsTradingNetwork-1202/src/platform-shared/resources"
 		}
     }
 }
@@ -116,7 +120,7 @@ dependencies {
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	
-	modImplementation("com.terraformersmc:modmenu:7.0.1") {
+	/*modImplementation("com.terraformersmc:modmenu:7.0.1") {
         exclude(group: "net.fabricmc.fabric-api")
     }
     
@@ -142,7 +146,7 @@ dependencies {
 	// at runtime, use the full JEI jar for Fabric
 	modRuntimeOnly("mezz.jei:jei-1.20.1-fabric:15.2.0.22")
 	
-	modImplementation ("curse.maven:jade-324717:4573047")
+	modImplementation ("curse.maven:jade-324717:4573047")*/
 }
 
 processResources {

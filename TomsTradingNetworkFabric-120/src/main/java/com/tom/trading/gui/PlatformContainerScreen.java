@@ -1,5 +1,6 @@
 package com.tom.trading.gui;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,5 +23,9 @@ public abstract class PlatformContainerScreen<T extends AbstractContainerMenu> e
 
 	public int getGuiTop() {
 		return topPos;
+	}
+
+	public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
+		super.renderBackground(guiGraphics);
 	}
 }

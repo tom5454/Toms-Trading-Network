@@ -53,7 +53,7 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 
 	@Override
 	public void render(GuiGraphics gr, int pMouseX, int pMouseY, float pPartialTick) {
-		this.renderBackground(gr);
+		this.renderBackground(gr, pMouseX, pMouseY, pPartialTick);
 		super.render(gr, pMouseX, pMouseY, pPartialTick);
 		Slot s = getSlotUnderMouse();
 		if(s != null && s.getContainerSlot() < 8) {
