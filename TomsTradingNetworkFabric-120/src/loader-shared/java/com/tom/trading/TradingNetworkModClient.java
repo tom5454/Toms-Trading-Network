@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.network.chat.Component;
 
 import com.tom.trading.gui.VendingMachineConfigScreen;
@@ -24,7 +23,7 @@ public class TradingNetworkModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientPlayNetworking.registerGlobalReceiver(NetworkHandler.DATA_S2C, (mc, h, buf, rp) -> {
-			CompoundTag tag = (CompoundTag) buf.readNbt(NbtAccounter.UNLIMITED);
+			CompoundTag tag = Platform.readNbtTag(buf);
 			mc.submit(() -> {
 				if(mc.screen instanceof IDataReceiver) {
 					((IDataReceiver)mc.screen).receive(tag);

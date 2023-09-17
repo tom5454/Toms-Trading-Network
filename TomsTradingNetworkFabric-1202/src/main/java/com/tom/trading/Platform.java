@@ -5,6 +5,9 @@ import java.util.List;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -31,4 +34,8 @@ public class Platform {
 	public static final CreativeModeTab TRADING_MOD_TAB = FabricItemGroup.builder().title(Component.translatable("itemGroup.toms_trading_network.tab")).icon(() -> new ItemStack(Content.VENDING_MACHINE.get())).displayItems((p, out) -> {
 		tabItems.forEach(out::accept);
 	}).build();
+
+	public static CompoundTag readNbtTag(FriendlyByteBuf buf) {
+		return (CompoundTag) buf.readNbt(NbtAccounter.unlimitedHeap());
+	}
 }

@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +29,7 @@ public class TradingNetworkMod implements ModInitializer {
 		Platform.BLOCK_ENTITY.register();
 
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.DATA_C2S, (s, p, h, buf, rp) -> {
-			CompoundTag tag = (CompoundTag) buf.readNbt(NbtAccounter.UNLIMITED);
+			CompoundTag tag = Platform.readNbtTag(buf);
 			s.submit(() -> {
 				if(p.containerMenu instanceof IDataReceiver) {
 					((IDataReceiver)p.containerMenu).receive(tag);
