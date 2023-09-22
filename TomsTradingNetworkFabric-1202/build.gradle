@@ -96,7 +96,6 @@ sourceSets {
 			exclude "com/tom/trading/jei/**"
 			exclude "com/tom/trading/rei/**"
 			exclude "com/tom/trading/emi/**"
-			exclude "com/tom/trading/jade/**"
 		}
 		resources {
 			srcDir "../TomsTradingNetwork-120/src/shared/resources"
@@ -144,9 +143,9 @@ dependencies {
 	modCompileOnlyApi("mezz.jei:jei-1.20.1-common-api:15.2.0.22")
 	modCompileOnlyApi("mezz.jei:jei-1.20.1-fabric-api:15.2.0.22")
 	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-1.20.1-fabric:15.2.0.22")
+	modRuntimeOnly("mezz.jei:jei-1.20.1-fabric:15.2.0.22")*/
 	
-	modImplementation ("curse.maven:jade-324717:4573047")*/
+	modImplementation ("curse.maven:jade-324717:4761986")
 }
 
 processResources {
