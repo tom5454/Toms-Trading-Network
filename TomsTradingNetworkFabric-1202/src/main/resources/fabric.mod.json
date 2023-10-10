@@ -25,13 +25,13 @@
 		"jade": [
 			"com.tom.trading.jade.JadePlugin"
 		],
-		"_rei_client": [
+		"rei_client": [
     		"com.tom.trading.rei.REIPlugin"
     	],
-    	"_emi": [
+    	"emi": [
     		"com.tom.trading.emi.EMIPlugin"
     	],
-    	"_jei_mod_plugin": [
+    	"jei_mod_plugin": [
 			"com.tom.trading.jei.JEIHandler"
 		]
 	},

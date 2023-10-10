@@ -93,9 +93,6 @@ sourceSets {
 			srcDir "../TomsTradingNetwork-120/src/shared/java"
 			srcDir "../TomsTradingNetworkFabric-120/src/loader-shared/java"
 			srcDir "../TomsTradingNetwork-1202/src/platform-shared/java"
-			exclude "com/tom/trading/jei/**"
-			exclude "com/tom/trading/rei/**"
-			exclude "com/tom/trading/emi/**"
 		}
 		resources {
 			srcDir "../TomsTradingNetwork-120/src/shared/resources"
@@ -119,11 +116,11 @@ dependencies {
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	
-	/*modImplementation("com.terraformersmc:modmenu:7.0.1") {
+	modImplementation("com.terraformersmc:modmenu:8.0.0") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
+	
+	modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
 		exclude(group: "net.fabricmc.fabric-api")
         exclude(group: "dev.architectury")
     }
@@ -135,15 +132,16 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
         exclude(group: "dev.architectury")
     }
-    modImplementation("dev.architectury:architectury-fabric:9.0.7")
-    modCompileOnly "dev.emi:emi-fabric:1.0.5+1.20.1:api"
-	modLocalRuntime "dev.emi:emi-fabric:1.0.5+1.20.1"
+    modImplementation("dev.architectury:architectury-fabric:10.0.8")
+    
+    modCompileOnly "dev.emi:emi-fabric:1.0.21+1.20.2:api"
+	modLocalRuntime "dev.emi:emi-fabric:1.0.21+1.20.2"
     
 	// compile against the JEI API but do not include it at runtime
-	modCompileOnlyApi("mezz.jei:jei-1.20.1-common-api:15.2.0.22")
-	modCompileOnlyApi("mezz.jei:jei-1.20.1-fabric-api:15.2.0.22")
+	modCompileOnlyApi("mezz.jei:jei-1.20.2-common-api:16.0.0.28")
+	modCompileOnlyApi("mezz.jei:jei-1.20.2-fabric-api:16.0.0.28")
 	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-1.20.1-fabric:15.2.0.22")*/
+	modRuntimeOnly("mezz.jei:jei-1.20.2-fabric:16.0.0.28")
 	
 	modImplementation ("curse.maven:jade-324717:4761986")
 }
