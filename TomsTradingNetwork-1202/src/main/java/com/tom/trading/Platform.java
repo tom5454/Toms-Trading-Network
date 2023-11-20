@@ -17,22 +17,21 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 
 import com.tom.trading.util.GameObject.GameRegistry;
 import com.tom.trading.util.GameObject.GameRegistryBE;
 
 public class Platform {
-	public static final GameRegistry<Item> ITEMS = new GameRegistry<>(ForgeRegistries.ITEMS);
-	public static final GameRegistry<Block> BLOCKS = new GameRegistry<>(ForgeRegistries.BLOCKS);
+	public static final GameRegistry<Item> ITEMS = new GameRegistry<>(Registries.ITEM);
+	public static final GameRegistry<Block> BLOCKS = new GameRegistry<>(Registries.BLOCK);
 	public static final GameRegistryBE BLOCK_ENTITY = new GameRegistryBE();
-	public static final GameRegistry<MenuType<?>> MENU_TYPE = new GameRegistry<>(ForgeRegistries.MENU_TYPES);
+	public static final GameRegistry<MenuType<?>> MENU_TYPE = new GameRegistry<>(Registries.MENU);
 	public static final DeferredRegister<CreativeModeTab> TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TradingNetworkMod.MODID);
 
 	private static List<Item> tabItems = new ArrayList<>();
-	public static final RegistryObject<CreativeModeTab> STORAGE_MOD_TAB = TAB.register("tab", () ->
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> STORAGE_MOD_TAB = TAB.register("tab", () ->
 	CreativeModeTab.builder()
 	.title(Component.translatable("itemGroup.toms_trading_network.tab"))
 	.icon(() -> new ItemStack(Content.VENDING_MACHINE.get()))
