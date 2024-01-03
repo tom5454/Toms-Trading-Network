@@ -22,13 +22,13 @@
 		"client": [
 			"com.tom.trading.TradingNetworkModClient"
 		],
-		"jade": [
+		"_jade": [
 			"com.tom.trading.jade.JadePlugin"
 		],
-		"rei_client": [
+		"_rei_client": [
     		"com.tom.trading.rei.REIPlugin"
     	],
-    	"emi": [
+    	"_emi": [
     		"com.tom.trading.emi.EMIPlugin"
     	],
     	"_jei_mod_plugin": [

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+  	"iCi",
+    "pep",
+    "ici"
+  ],
+  "key": {
+  	"i": {
+      "tag": "forge:ingots/iron"
+    },
+    "e": {
+      "tag": "forge:gems/emerald"
+    },
+    "c": {
+      "tag": "forge:chests/wooden"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "p": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "toms_trading_network:vending_machine"
+  }
+}
