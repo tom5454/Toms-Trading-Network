@@ -94,7 +94,6 @@ sourceSets {
 			srcDir "src/platform-shared/java"
 			if(!useLib)exclude "com/tom/trading/rei/**"
 			exclude "com/tom/trading/top/**"
-			exclude "com/tom/trading/jei/**"
 		}
 		resources {
 			srcDir "src/shared/resources"
@@ -133,12 +132,16 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    
+    compileOnly "mezz.jei:jei-1.20.4-neoforge-api:17.0.0.30"
+    compileOnly "mezz.jei:jei-1.20.4-common-api:17.0.0.30"
+    // at runtime, use the full JEI jar
+  	runtimeOnly "mezz.jei:jei-1.20.4-neoforge:17.0.0.30"
+  	
     //implementation "curse.maven:the-one-probe-245211:4579432"
   	implementation "curse.maven:jade-324717:4980188"
   	
-  	compileOnly "dev.emi:emi-neoforge:1.0.29+1.20.4:api"
-	//runtimeOnly "dev.emi:emi-neoforge:1.0.29+1.20.4"
+  	compileOnly "dev.emi:emi-neoforge:1.1.0+1.20.4:api"
+	runtimeOnly "dev.emi:emi-neoforge:1.1.0+1.20.4"
   	
   	if(useLib) {
     	compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:14.0.688"

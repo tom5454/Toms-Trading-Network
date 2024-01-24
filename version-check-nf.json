@@ -1,0 +1,17 @@
+{
+	"homepage": "https://www.curseforge.com/minecraft/mc-mods/toms-trading-network",
+	"promos": {
+		"1.20.2-latest": "0.2.7",
+		"1.20.4-latest": "0.2.8"
+	},
+	"1.20.4": {
+		"0.2.8": "Added JEI support",
+		"0.2.7": "Added REI, EMI, Jade support",
+		"0.2.6": "1.20.4 port"
+	},
+	"1.20.2": {
+		"0.2.7": "Added REI, EMI, Jade support",
+		"0.2.6": "NeoForge 20.2.59-beta port",
+		"0.2.5": "NeoForge 1.20.2 port"
+	}
+}

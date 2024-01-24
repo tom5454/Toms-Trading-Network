@@ -31,7 +31,7 @@
     	"emi": [
     		"com.tom.trading.emi.EMIPlugin"
     	],
-    	"_jei_mod_plugin": [
+    	"jei_mod_plugin": [
 			"com.tom.trading.jei.JEIHandler"
 		]
 	},

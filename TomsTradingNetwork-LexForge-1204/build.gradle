@@ -138,7 +138,6 @@ sourceSets {
 			srcDir "../TomsTradingNetwork-1204/src/platform-shared/java"
 			if(!useLib)exclude "com/tom/trading/rei/**"
 			exclude "com/tom/trading/top/**"
-			exclude "com/tom/trading/jei/**"
 			exclude "com/tom/trading/emi/**"
 		}
 		resources {
@@ -194,11 +193,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    /*// compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.20.2-forge-api:16.0.0.28")
-    compileOnly fg.deobf("mezz.jei:jei-1.20.2-common-api:16.0.0.28")
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-1.20.4-forge-api:17.0.0.30")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.4-common-api:17.0.0.30")
   	// at runtime, use the full JEI jar
-  	runtimeOnly fg.deobf("mezz.jei:jei-1.20.2-forge:16.0.0.28")*/
+  	runtimeOnly fg.deobf("mezz.jei:jei-1.20.4-forge:17.0.0.30")
   	
   	//implementation fg.deobf("curse.maven:the-one-probe-245211:4579432")
   	implementation fg.deobf("curse.maven:jade-324717:4978952")
