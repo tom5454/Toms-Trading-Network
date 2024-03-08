@@ -167,13 +167,14 @@ repositories {
     }
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.architectury.dev/" }
+    maven { url "https://maven.terraformersmc.com/releases/"}
 }
 
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.22'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.1.0'
     
     // Mixin annotation processor - generates the refmap
     annotationProcessor "org.spongepowered:mixin:0.8.4:processor"
@@ -198,6 +199,9 @@ dependencies {
   	
   	implementation fg.deobf("curse.maven:the-one-probe-245211:4442439")
   	implementation fg.deobf("curse.maven:jade-324717:4439089")
+  	
+  	compileOnly fg.deobf("dev.emi:emi-forge:1.0.1+1.19.4:api")
+	runtimeOnly fg.deobf("dev.emi:emi-forge:1.0.1+1.19.4")
   	
   	if(useLib) {
     	compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:11.0.597")

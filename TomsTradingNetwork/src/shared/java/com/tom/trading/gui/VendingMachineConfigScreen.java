@@ -169,7 +169,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 									() -> {
 										if(!tags.isEmpty()) {
 											popup.replace(tags.stream().map(s -> new ButtonElement(() -> Component.literal(s), () -> {
-												ItemStack st = new ItemStack(Content.TAG_FILTER.get());
+												ItemStack st = new ItemStack(Content.TAG_FILTER.get(), clicked.getItem().getCount());
 												st.getOrCreateTag().putString("tag", s);
 												menu.setPhantom(clicked, st);
 												popup.close();

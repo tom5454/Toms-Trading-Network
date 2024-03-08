@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.1-SNAPSHOT'
+	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
 	
 }
@@ -136,7 +136,8 @@ dependencies {
         exclude(group: "dev.architectury")
     }
     modImplementation("dev.architectury:architectury-fabric:6.2.43")
-    modImplementation "dev.emi:emi:0.7.3+1.19.2"
+    modCompileOnly "dev.emi:emi-fabric:1.0.1+1.19.2:api"
+	modLocalRuntime "dev.emi:emi-fabric:1.0.1+1.19.2"
     
 	// compile against the JEI API but do not include it at runtime
 	modCompileOnlyApi("mezz.jei:jei-1.19.2-common-api:11.6.0.1013")

@@ -172,6 +172,7 @@ repositories {
 	}
 	maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.architectury.dev/" }
+    maven { url "https://maven.terraformersmc.com/releases/"}
 }
 
 dependencies {
@@ -203,6 +204,9 @@ dependencies {
   	
   	implementation fg.deobf("curse.maven:the-one-probe-245211:3965693")
   	implementation fg.deobf("curse.maven:jade-324717:4433884")
+  	
+  	compileOnly fg.deobf("dev.emi:emi-forge:1.0.1+1.19.2:api")
+	runtimeOnly fg.deobf("dev.emi:emi-forge:1.0.1+1.19.2")
   	
   	if(useLib) {
     	compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:9.1.587")

@@ -63,6 +63,7 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 				tooltip.add(elements.box(t, b));
 
 				t = elements.tooltip();
+				t.add(Component.translatable("label.toms_trading_network.vending_machine.result"));
 				for (int i = 4; i < 8; i++) {
 					ItemStack is = c.getItem(i);
 					if(!is.isEmpty()) {
@@ -72,7 +73,6 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 						is.getTooltipLines(accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
 					}
 				}
-				t.add(Component.translatable("label.toms_trading_network.vending_machine.result"));
 				b = new BoxStyle();
 				b.borderColor = 0xFF00FF00;
 				b.borderWidth = 1;

@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import com.tom.trading.Content;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
 import com.tom.trading.util.DataSlots;
+import com.tom.trading.util.LimitedContainer;
 
 public class VendingMachineTradingMenu extends AbstractContainerMenu {
 	private VendingMachineBlockEntityBase machine;
@@ -79,7 +80,7 @@ public class VendingMachineTradingMenu extends AbstractContainerMenu {
 	@Override
 	public boolean clickMenuButton(Player pPlayer, int pId) {
 		for(int i = 0;i<pId;i++) {
-			int r = machine.tradeWith(pPlayer.getInventory());
+			int r = machine.tradeWith(new LimitedContainer(pPlayer.getInventory(), pPlayer.getInventory().items.size()));
 			if(r != 0) {
 				pPlayer.sendSystemMessage(Component.translatable("chat.toms_trading_network.vending_machine.trade_error", i, pId, Component.translatable("chat.toms_trading_network.vending_machine.trade_error." + r)));
 				break;

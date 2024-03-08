@@ -19,6 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.tom.trading.Content;
@@ -116,10 +118,10 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	}
 
 	public Runnable addOutput(List<ItemStack> items) {
-		return addOutput(outputs, items);
+		return addOutput(outputs, items, false);
 	}
 
-	private Runnable addOutput(Container outputs, List<ItemStack> items) {
+	private Runnable addOutput(Container outputs, List<ItemStack> items, boolean drop) {
 		ItemStack[] modArray = new ItemStack[outputs.getContainerSize()];
 		for (int i = 0; i < modArray.length; i++) {
 			modArray[i] = outputs.getItem(i).copy();
@@ -133,10 +135,18 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 					int m = Math.min(outputs.getMaxStackSize(), o.getMaxStackSize());
 					int c = Math.min(o.getCount(), m - s.getCount());
 					if(c > 0) {
-						s.grow(c);
+						ItemStack ins = o.copy();
+						ins.setCount(c);
 						o.shrink(c);
-						final int fj = j;
-						actions.add(() -> outputs.setItem(fj, s));
+						s.grow(c);
+						actions.add(() -> {
+							ItemStack is = HopperBlockEntity.addItem(null, outputs, ins, null);
+							if (!is.isEmpty()) {
+								if (drop)
+									Block.popResource(level, worldPosition, is);
+								//never?
+							}
+						});
 					}
 				}
 				if(o.isEmpty())break;
@@ -147,8 +157,13 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 						ItemStack s2 = o.copy();
 						modArray[j] = s2;
 						o.setCount(0);
-						final int fj = j;
-						actions.add(() -> outputs.setItem(fj, s2));
+						actions.add(() -> {
+							ItemStack is = HopperBlockEntity.addItem(null, outputs, s2, null);
+							if (!is.isEmpty()) {
+								if (drop)
+									Block.popResource(level, worldPosition, is);
+							}
+						});
 					}
 				}
 			}
@@ -271,7 +286,7 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		if(commitGetPlayer == null)return 1;
 		Runnable commitGetInv = consumeInputs(machineItems);
 		if(commitGetInv == null)return 2;
-		Runnable commitGive = addOutput(c, machineItems);
+		Runnable commitGive = addOutput(c, machineItems, true);
 		if(commitGive == null)return 3;
 		Runnable commitStore = addOutput(playerItems);
 		if(commitStore == null)return 4;
