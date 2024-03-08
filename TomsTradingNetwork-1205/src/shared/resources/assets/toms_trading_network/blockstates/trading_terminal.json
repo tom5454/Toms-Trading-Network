@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"": { "model": "toms_trading_network:block/trading_terminal" }
+	}
+}

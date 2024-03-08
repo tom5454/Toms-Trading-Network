@@ -8,6 +8,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -21,6 +23,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClick
 import com.tom.trading.block.AlwaysActivatableBlock;
 import com.tom.trading.network.NetworkHandler;
 import com.tom.trading.tile.VendingMachineBlockEntity;
+import com.tom.trading.top.TheOneProbeHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TradingNetworkMod.MODID)
@@ -69,8 +72,8 @@ public class TradingNetworkMod {
 	}
 
 	public void enqueueIMC(InterModEnqueueEvent e) {
-		/*if(ModList.get().isLoaded("theoneprobe"))
-			InterModComms.sendTo("theoneprobe", "getTheOneProbe", () -> TheOneProbeHandler.create());*/
+		if(ModList.get().isLoaded("theoneprobe"))
+			InterModComms.sendTo("theoneprobe", "getTheOneProbe", () -> TheOneProbeHandler.create());
 	}
 
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
