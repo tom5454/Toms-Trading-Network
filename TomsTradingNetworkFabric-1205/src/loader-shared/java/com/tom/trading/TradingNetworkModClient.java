@@ -31,7 +31,7 @@ public class TradingNetworkModClient implements ClientModInitializer {
 		MenuScreens.register(Content.VENDING_MACHINE_CONFIG_MENU.get(), VendingMachineConfigScreen::new);
 		MenuScreens.register(Content.VENDING_MACHINE_TRADING_MENU.get(), VendingMachineTradingScreen::new);
 
-		ItemTooltipCallback.EVENT.register((s, c, l) -> {
+		ItemTooltipCallback.EVENT.register((s, c, t, l) -> {
 			Collections.addAll(l, tooltipExt);
 		});
 	}
