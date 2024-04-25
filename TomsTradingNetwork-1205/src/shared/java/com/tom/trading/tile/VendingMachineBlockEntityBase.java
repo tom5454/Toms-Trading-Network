@@ -50,8 +50,8 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	}
 
 	@Override
-	public void load(CompoundTag pTag, HolderLookup.Provider provider) {
-		super.load(pTag, provider);
+	public void loadAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
+		super.loadAdditional(pTag, provider);
 		inputs.fromTag(pTag.getList("Inputs", Tag.TAG_COMPOUND), provider);
 		outputs.fromTag(pTag.getList("Outputs", Tag.TAG_COMPOUND), provider);
 		config.fromTag(pTag.getList("Config", Tag.TAG_COMPOUND), provider);

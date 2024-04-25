@@ -1,9 +1,11 @@
 package com.tom.trading.jade;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.Vec2;
@@ -31,7 +33,7 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 	@Override
 	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
 		VendingMachineBlockEntity te = (VendingMachineBlockEntity) accessor.getBlockEntity();
-		data.put("config", te.getConfig().createTag());
+		data.put("config", te.getConfig().createTag(accessor.getLevel().registryAccess()));
 		data.putByte("state", (byte) te.getTradingState());
 	}
 
@@ -39,7 +41,7 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
 		if (accessor.getServerData().contains("config")) {
 			BasicContainer c = new BasicContainer(8);
-			c.fromTag(accessor.getServerData().getList("config", Tag.TAG_COMPOUND));
+			c.fromTag(accessor.getServerData().getList("config", Tag.TAG_COMPOUND), Minecraft.getInstance().level.registryAccess());
 			byte state = accessor.getServerData().getByte("state");
 			IElementHelper elements = IElementHelper.get();
 			if(accessor.showDetails()) {
@@ -51,7 +53,7 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 						IElement icon = elements.item(is, 1f).size(new Vec2(18, 18)).translate(new Vec2(0, -1));
 						icon.message(null);
 						t.add(icon);
-						is.getTooltipLines(accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
+						is.getTooltipLines(TooltipContext.of(accessor.getLevel()), accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
 					}
 				}
 				BoxStyle.GradientBorder b = BoxStyle.getTransparent().clone();
@@ -67,7 +69,7 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 						IElement icon = elements.item(is, 1f).size(new Vec2(18, 18)).translate(new Vec2(0, -1));
 						icon.message(null);
 						t.add(icon);
-						is.getTooltipLines(accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
+						is.getTooltipLines(TooltipContext.of(accessor.getLevel()), accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
 					}
 				}
 				b = BoxStyle.getTransparent().clone();

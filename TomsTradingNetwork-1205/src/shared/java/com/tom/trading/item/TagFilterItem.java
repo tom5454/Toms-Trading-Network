@@ -7,7 +7,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import com.tom.trading.Content;
 
@@ -18,8 +17,8 @@ public class TagFilterItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltipComponents,
-			TooltipFlag pIsAdvanced) {
+	public void appendHoverText(ItemStack pStack, TooltipContext tooltipContext, List<Component> pTooltipComponents,
+			TooltipFlag tooltipFlag) {
 		TagKey<Item> tag = pStack.get(Content.TAG_COMPONENT.get());
 		if(tag != null) {
 			pTooltipComponents.add(Component.literal(tag.location().toString()));

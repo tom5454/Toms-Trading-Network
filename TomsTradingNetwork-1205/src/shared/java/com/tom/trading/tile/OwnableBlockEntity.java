@@ -33,8 +33,8 @@ public class OwnableBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public void load(CompoundTag pTag, HolderLookup.Provider provider) {
-		super.load(pTag, provider);
+	public void loadAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
+		super.loadAdditional(pTag, provider);
 		ownerNameCache = pTag.contains("ownerNameCache", Tag.TAG_STRING) ? pTag.getString("ownerNameCache") : null;
 		owner = pTag.hasUUID("owner") ? pTag.getUUID("owner") : null;
 	}
