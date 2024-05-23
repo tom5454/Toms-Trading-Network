@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "front": "toms_trading_network:block/vending_machine_front",
-    "side": "toms_trading_network:block/vending_machine_side",
-    "top": "toms_trading_network:block/vending_machine_side"
-  }
-}
