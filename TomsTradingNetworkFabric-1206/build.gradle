@@ -90,17 +90,17 @@ sourceSets {
             ]
         }
 		java {
-			srcDir "../TomsTradingNetwork-1205/src/shared/java"
+			srcDir "../TomsTradingNetwork-1206/src/shared/java"
 			srcDir "src/loader-shared/java"
-			srcDir "../TomsTradingNetwork-1205/src/platform-shared/java"
+			srcDir "../TomsTradingNetwork-1206/src/platform-shared/java"
 			exclude "com/tom/trading/jei/**"
 			exclude "com/tom/trading/rei/**"
 			exclude "com/tom/trading/emi/**"
 		}
 		resources {
-			srcDir "../TomsTradingNetwork-1205/src/shared/resources"
+			srcDir "../TomsTradingNetwork-1206/src/shared/resources"
 			srcDir "src/loader-shared/resources"
-			srcDir "../TomsTradingNetwork-1205/src/platform-shared/resources"
+			srcDir "../TomsTradingNetwork-1206/src/platform-shared/resources"
 		}
     }
 }
