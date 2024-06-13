@@ -93,9 +93,6 @@ sourceSets {
 			srcDir "../TomsTradingNetwork-1206/src/shared/java"
 			srcDir "src/loader-shared/java"
 			srcDir "../TomsTradingNetwork-1206/src/platform-shared/java"
-			exclude "com/tom/trading/jei/**"
-			exclude "com/tom/trading/rei/**"
-			exclude "com/tom/trading/emi/**"
 		}
 		resources {
 			srcDir "../TomsTradingNetwork-1206/src/shared/resources"
@@ -119,7 +116,7 @@ dependencies {
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	
-	/*modImplementation("com.terraformersmc:modmenu:9.0.0") {
+	modImplementation("com.terraformersmc:modmenu:10.0.0-beta.1") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 	
@@ -135,18 +132,18 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
         exclude(group: "dev.architectury")
     }
-    modImplementation("dev.architectury:architectury-fabric:11.0.9")
+    modImplementation("dev.architectury:architectury-fabric:12.0.28")
     
-    modCompileOnly  "dev.emi:emi-fabric:1.0.29+1.20.4:api"
-	modLocalRuntime "dev.emi:emi-fabric:1.0.29+1.20.4"
+    modCompileOnly  "dev.emi:emi-fabric:1.1.6+1.20.6:api"
+	modLocalRuntime "dev.emi:emi-fabric:1.1.6+1.20.6"
     
-	/* // compile against the JEI API but do not include it at runtime
-	modCompileOnlyApi("mezz.jei:jei-1.20.2-common-api:16.0.0.28")
-	modCompileOnlyApi("mezz.jei:jei-1.20.2-fabric-api:16.0.0.28")
+	// compile against the JEI API but do not include it at runtime
+	modCompileOnlyApi("mezz.jei:jei-1.20.6-common-api:18.0.0.59")
+	modCompileOnlyApi("mezz.jei:jei-1.20.6-fabric-api:18.0.0.59")
 	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-1.20.2-fabric:16.0.0.28")*/
+	modRuntimeOnly("mezz.jei:jei-1.20.6-fabric:18.0.0.59")
 	
-	modImplementation ("curse.maven:jade-324717:5288679")
+	modImplementation ("curse.maven:jade-324717:5366607")
 }
 
 processResources {

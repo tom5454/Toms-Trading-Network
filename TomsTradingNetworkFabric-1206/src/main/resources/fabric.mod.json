@@ -25,13 +25,13 @@
 		"jade": [
 			"com.tom.trading.jade.JadePlugin"
 		],
-		"_rei_client": [
+		"rei_client": [
     		"com.tom.trading.rei.REIPlugin"
     	],
-    	"_emi": [
+    	"emi": [
     		"com.tom.trading.emi.EMIPlugin"
     	],
-    	"_jei_mod_plugin": [
+    	"jei_mod_plugin": [
 			"com.tom.trading.jei.JEIHandler"
 		]
 	},
@@ -39,7 +39,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.7.4",
-		"minecraft": ">1.20.1",
+		"minecraft": ">1.20.4",
 		"java": ">=17",
 		"fabric-api": "*"
 	}
