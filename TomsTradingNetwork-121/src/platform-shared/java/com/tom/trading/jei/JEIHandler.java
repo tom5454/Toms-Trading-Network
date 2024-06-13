@@ -14,7 +14,7 @@ public class JEIHandler implements IModPlugin {
 
 	@Override
 	public ResourceLocation getPluginUid() {
-		return new ResourceLocation(TradingNetworkMod.MODID, "jei");
+		return ResourceLocation.tryBuild(TradingNetworkMod.MODID, "jei");
 	}
 
 	@Override

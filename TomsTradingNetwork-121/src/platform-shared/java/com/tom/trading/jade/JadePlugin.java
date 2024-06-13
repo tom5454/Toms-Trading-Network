@@ -13,7 +13,7 @@ import snownee.jade.api.WailaPlugin;
 
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin {
-	public static final ResourceLocation VENDING_MACHINE = new ResourceLocation(TradingNetworkMod.MODID, "vending_machine");
+	public static final ResourceLocation VENDING_MACHINE = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "vending_machine");
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
