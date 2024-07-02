@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -31,9 +35,15 @@ public class Platform {
 		return item;
 	}
 
+	private static final ResourceKey<CreativeModeTab> ITEM_GROUP = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.tryBuild(TradingNetworkMod.MODID, "tab"));
+
 	public static final CreativeModeTab TRADING_MOD_TAB = FabricItemGroup.builder().title(Component.translatable("itemGroup.toms_trading_network.tab")).icon(() -> new ItemStack(Content.VENDING_MACHINE.get())).displayItems((p, out) -> {
 		tabItems.forEach(out::accept);
 	}).build();
+
+	static {
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ITEM_GROUP, TRADING_MOD_TAB);
+	}
 
 	public static CompoundTag readNbtTag(FriendlyByteBuf buf) {
 		return (CompoundTag) buf.readNbt(NbtAccounter.unlimitedHeap());
