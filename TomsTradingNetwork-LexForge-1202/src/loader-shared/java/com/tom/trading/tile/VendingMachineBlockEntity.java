@@ -78,7 +78,7 @@ public class VendingMachineBlockEntity extends VendingMachineBlockEntityBase {
 
 		@Override
 		public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-			return slot >= inputWr.getSlots() && canInput(stack, dir);
+			return slot < inputWr.getSlots() && canInput(stack, dir);
 		}
 	}
 
