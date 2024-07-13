@@ -1,20 +1,22 @@
 {
 	"homepage": "https://www.curseforge.com/minecraft/mc-mods/toms-trading-network",
 	"promos": {
-		"1.19.2-latest": "0.2.2",
-		"1.19.4-latest": "0.2.2",
-		"1.20-latest": "0.3.0",
-		"1.20.1-latest": "0.3.0",
-		"1.20.2-latest": "0.3.0",
-		"1.20.4-latest": "0.3.0"
+		"1.19.2-latest": "0.2.3",
+		"1.19.4-latest": "0.2.3",
+		"1.20-latest": "0.3.1",
+		"1.20.1-latest": "0.3.1",
+		"1.20.2-latest": "0.3.1",
+		"1.20.4-latest": "0.3.1"
 	},
 	"1.20.4": {
+		"0.3.1": "Fixed insertion check not working",
 		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.7": "Fixed dupe bug with vending machine",
 		"0.2.6": "Added JEI support",
 		"0.2.5": "1.20.4 port"
 	},
 	"1.20.2": {
+		"0.3.1": "Fixed insertion check not working",
 		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.6": "Fixed dupe bug with vending machine",
 		"0.2.5": "Added Jade support",
@@ -22,18 +24,21 @@
 		"0.2.3": "1.20.2 port"
 	},
 	"1.20": {
+		"0.3.1": "Fixed insertion check not working",
 		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.3": "Fixed dupe bug with vending machine",
 		"0.2.2": "Mod integrations",
 		"0.2.1": "1.20 port"
 	},
 	"1.19.2": {
+		"0.2.3": "Fixed insertion check not working",
 		"0.2.2": "Fixed dupe bug with vending machine",
 		"0.2.1": "Fixed vending machine side config not working",
 		"0.2.0": "Added match NBT and match tag options to vending machine\nAdded JEI, REI, EMI drag & drop fake items to vending machine config GUI\nImproved TOP and Jade tooltips",
 		"0.1.0": "First Release"
 	},
 	"1.19.4": {
+		"0.2.3": "Fixed insertion check not working",
 		"0.2.2": "Fixed dupe bug with vending machine",
 		"0.2.1": "Fixed vending machine side config not working",
 		"0.2.0": "Added match NBT and match tag options to vending machine\nAdded JEI, REI, EMI drag & drop fake items to vending machine config GUI\nImproved TOP and Jade tooltips",
