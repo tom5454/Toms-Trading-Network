@@ -8,9 +8,9 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-import com.tom.trading.gui.AbstractFilteredMenu;
-import com.tom.trading.gui.AbstractFilteredScreen;
-import com.tom.trading.gui.PhantomSlot;
+import com.tom.trading.menu.AbstractFilteredMenu;
+import com.tom.trading.menu.slot.PhantomSlot;
+import com.tom.trading.screen.AbstractFilteredScreen;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;

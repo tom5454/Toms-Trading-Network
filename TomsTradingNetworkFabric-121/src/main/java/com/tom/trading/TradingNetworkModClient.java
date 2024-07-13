@@ -13,9 +13,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 
-import com.tom.trading.gui.VendingMachineConfigScreen;
-import com.tom.trading.gui.VendingMachineTradingScreen;
 import com.tom.trading.network.DataPacket;
+import com.tom.trading.screen.VendingMachineConfigScreen;
+import com.tom.trading.screen.VendingMachineTradingScreen;
 import com.tom.trading.util.IDataReceiver;
 
 public class TradingNetworkModClient implements ClientModInitializer {

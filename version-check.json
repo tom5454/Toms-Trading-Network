@@ -3,23 +3,26 @@
 	"promos": {
 		"1.19.2-latest": "0.2.2",
 		"1.19.4-latest": "0.2.2",
-		"1.20-latest": "0.2.3",
-		"1.20.1-latest": "0.2.3",
-		"1.20.2-latest": "0.2.6",
-		"1.20.4-latest": "0.2.7"
+		"1.20-latest": "0.3.0",
+		"1.20.1-latest": "0.3.0",
+		"1.20.2-latest": "0.3.0",
+		"1.20.4-latest": "0.3.0"
 	},
 	"1.20.4": {
+		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.7": "Fixed dupe bug with vending machine",
 		"0.2.6": "Added JEI support",
 		"0.2.5": "1.20.4 port"
 	},
 	"1.20.2": {
+		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.6": "Fixed dupe bug with vending machine",
 		"0.2.5": "Added Jade support",
 		"0.2.4": "Added JEI, REI, EMI support on 1.20.2",
 		"0.2.3": "1.20.2 port"
 	},
 	"1.20": {
+		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.3": "Fixed dupe bug with vending machine",
 		"0.2.2": "Mod integrations",
 		"0.2.1": "1.20 port"

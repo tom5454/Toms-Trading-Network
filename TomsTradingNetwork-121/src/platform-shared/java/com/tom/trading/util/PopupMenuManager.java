@@ -11,11 +11,10 @@ import org.lwjgl.glfw.GLFW;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-
-import com.tom.trading.gui.PlatformEditBox;
 
 public class PopupMenuManager {
 	private final Screen screen;
@@ -139,17 +138,17 @@ public class PopupMenuManager {
 		private final Supplier<MutableComponent> text;
 		private final Consumer<String> action;
 		private boolean activated;
-		private PlatformEditBox box;
+		private EditBox box;
 		private String value;
 
 		public TextFieldElement(Supplier<MutableComponent> text, Consumer<String> action, Font font, String value) {
 			this.text = text;
 			this.action = action;
-			box = new PlatformEditBox(font, 0, 0, 0, 0, null);
+			box = new EditBox(font, 0, 0, 0, 0, null);
 			this.value = value;
 			box.setValue(value);
 			box.setCanLoseFocus(false);
-			box.setFocus(true);
+			box.setFocused(true);
 		}
 
 		@Override

@@ -13,8 +13,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
-import com.tom.trading.gui.VendingMachineConfigScreen;
-import com.tom.trading.gui.VendingMachineTradingScreen;
+import com.tom.trading.screen.VendingMachineConfigScreen;
+import com.tom.trading.screen.VendingMachineTradingScreen;
 
 public class TradingNetworkModClient {
 

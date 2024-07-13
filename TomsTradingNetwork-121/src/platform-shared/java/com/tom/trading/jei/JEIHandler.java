@@ -3,7 +3,7 @@ package com.tom.trading.jei;
 import net.minecraft.resources.ResourceLocation;
 
 import com.tom.trading.TradingNetworkMod;
-import com.tom.trading.gui.AbstractFilteredScreen;
+import com.tom.trading.screen.AbstractFilteredScreen;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;

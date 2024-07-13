@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 
 import com.tom.trading.block.VendingMachineBlock;
-import com.tom.trading.gui.VendingMachineConfigMenu;
-import com.tom.trading.gui.VendingMachineTradingMenu;
 import com.tom.trading.item.TagFilterItem;
+import com.tom.trading.menu.VendingMachineConfigMenu;
+import com.tom.trading.menu.VendingMachineTradingMenu;
 import com.tom.trading.tile.VendingMachineBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
 import com.tom.trading.util.GameObject;

@@ -1,4 +1,4 @@
-package com.tom.trading.gui;
+package com.tom.trading.menu.slot;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;

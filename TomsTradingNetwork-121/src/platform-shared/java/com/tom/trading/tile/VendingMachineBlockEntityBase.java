@@ -19,25 +19,29 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.tom.trading.Content;
 import com.tom.trading.block.VendingMachineBlock;
-import com.tom.trading.gui.VendingMachineConfigMenu;
-import com.tom.trading.gui.VendingMachineTradingMenu;
+import com.tom.trading.menu.VendingMachineConfigMenu;
+import com.tom.trading.menu.VendingMachineTradingMenu;
 import com.tom.trading.util.BasicContainer;
 import com.tom.trading.util.BlockFaceDirection;
+import com.tom.trading.util.TradeResult;
 
 public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity implements MenuProvider, Nameable {
 	private BasicContainer config = new BasicContainer(8);
 	private BasicContainer inputs = new BasicContainer(8);
 	private BasicContainer outputs = new BasicContainer(8);
 
-	private int inputSides, outputSides, matchNBT = 0xff;
+	private int inputSides, outputSides, autoSides, matchNBT = 0xff;
 	private Component name;
 	private Boolean hasInputs;
+	private boolean creativeMode;
 
 	public VendingMachineBlockEntityBase(BlockPos pPos, BlockState pBlockState) {
 		super(Content.VENDING_MACHINE_TILE.get(), pPos, pBlockState);
@@ -57,7 +61,9 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		config.fromTag(pTag.getList("Config", Tag.TAG_COMPOUND), provider);
 		inputSides = pTag.getInt("inputSides");
 		outputSides = pTag.getInt("outputSides");
+		autoSides = pTag.getInt("autoSides");
 		matchNBT = pTag.contains("matchNBT") ? pTag.getInt("matchNBT") : 0xff;
+		creativeMode = pTag.getBoolean("Creative");
 		if (pTag.contains("CustomName", 8)) {
 			this.name = Component.Serializer.fromJson(pTag.getString("CustomName"), provider);
 		}
@@ -71,7 +77,9 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		pTag.put("Config", config.createTag(provider));
 		pTag.putInt("inputSides", inputSides);
 		pTag.putInt("outputSides", outputSides);
+		pTag.putInt("autoSides", autoSides);
 		pTag.putInt("matchNBT", matchNBT);
+		pTag.putBoolean("Creative", creativeMode);
 		if (this.name != null) {
 			pTag.putString("CustomName", Component.Serializer.toJson(this.name, provider));
 		}
@@ -172,16 +180,15 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	}
 
 	public boolean canInput(ItemStack stack, Direction dir) {
-		Direction facing = getBlockState().getValue(VendingMachineBlock.FACING);
-		BlockFaceDirection d = BlockFaceDirection.getHorizontalFace(facing, dir);
-		if(d == BlockFaceDirection.FRONT)return false;
-		if ((inputSides & (1 << d.ordinal())) != 0) {
-			if(stack.isEmpty())return true;
-			for (int i = 0; i < 4; i++) {
-				ItemStack o = config.getItem(i + 4).copy();
-				if(compareItemStack(stack, o, i + 4)) {
-					return true;
-				}
+		return canInputFrom(dir) && canInputItem(stack);
+	}
+
+	public boolean canInputItem(ItemStack stack) {
+		if(stack.isEmpty())return false;
+		for (int i = 0; i < 4; i++) {
+			ItemStack o = config.getItem(i + 4).copy();
+			if(compareItemStack(stack, o, i + 4)) {
+				return true;
 			}
 		}
 		return false;
@@ -195,6 +202,13 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		}
 		if((matchNBT & (1 << slot)) != 0)return ItemStack.isSameItemSameComponents(stack, template);
 		else return ItemStack.isSameItem(stack, template);
+	}
+
+	public boolean canInputFrom(Direction dir) {
+		Direction facing = getBlockState().getValue(VendingMachineBlock.FACING);
+		BlockFaceDirection d = BlockFaceDirection.getHorizontalFace(facing, dir);
+		if(d == BlockFaceDirection.FRONT)return false;
+		return (inputSides & (1 << d.ordinal())) != 0;
 	}
 
 	public boolean canOutput(Direction dir) {
@@ -253,20 +267,30 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		return outputSides;
 	}
 
+	public int getAutoSides() {
+		return autoSides;
+	}
+
 	public int getMatchNBT() {
 		return matchNBT;
 	}
 
+	public boolean isCreativeMode() {
+		return creativeMode;
+	}
+
 	public int getTradingState() {
-		if(hasInputs == null)hasInputs = consumeInputs(new ArrayList<>()) != null;
+		if(hasInputs == null)hasInputs = creativeMode || consumeInputs(new ArrayList<>()) != null;
 		return hasInputs ? 1 : 0;
 	}
 
-	public void setSides(int id, int config) {
+	public void setSides(int id, int config, boolean auto) {
 		if((config & 1) != 0)inputSides |= (1 << id);
 		else inputSides &=~ (1 << id);
 		if((config & 2) != 0)outputSides |= (1 << id);
 		else outputSides &=~ (1 << id);
+		if (auto && config != 0) autoSides |= (1 << id);
+		else autoSides &=~ (1 << id);
 		setChanged();
 	}
 
@@ -275,21 +299,69 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		else matchNBT &=~ (1 << slot);
 	}
 
-	public int tradeWith(Container c) {
+	public TradeResult tradeWith(Container c) {
+		if (creativeMode) {
+			List<ItemStack> playerItems = new ArrayList<>();
+			Runnable commitGetPlayer = consumeInputs(c, 0, playerItems);
+			if(commitGetPlayer == null)return TradeResult.TRADER_MISSING_INPUT;
+			List<ItemStack> machineItems = new ArrayList<>();
+			for (int i = 4; i < 8; i++) {
+				ItemStack o = config.getItem(i);
+				int rem = o.getCount();
+				if(rem > 0 && o.getItem() != Content.TAG_FILTER.get())
+					machineItems.add(o.copy());
+			}
+			Runnable commitGive = addOutput(c, machineItems, true);
+			if(commitGive == null)return TradeResult.TRADER_NO_SPACE;
+			commitGetPlayer.run();
+			commitGive.run();
+			return TradeResult.SUCCESS;
+		}
 		List<ItemStack> playerItems = new ArrayList<>();
 		List<ItemStack> machineItems = new ArrayList<>();
 		Runnable commitGetPlayer = consumeInputs(c, 0, playerItems);
-		if(commitGetPlayer == null)return 1;
+		if(commitGetPlayer == null)return TradeResult.TRADER_MISSING_INPUT;
 		Runnable commitGetInv = consumeInputs(machineItems);
-		if(commitGetInv == null)return 2;
+		if(commitGetInv == null)return TradeResult.MACHINE_MISSING_INPUT;
 		Runnable commitGive = addOutput(c, machineItems, true);
-		if(commitGive == null)return 3;
+		if(commitGive == null)return TradeResult.TRADER_NO_SPACE;
 		Runnable commitStore = addOutput(playerItems);
-		if(commitStore == null)return 4;
+		if(commitStore == null)return TradeResult.MACHINE_NO_SPACE;
 		commitGetPlayer.run();
 		commitGetInv.run();
 		commitGive.run();
 		commitStore.run();
-		return 0;
+		return TradeResult.SUCCESS;
+	}
+
+	@Override
+	public boolean canAccess(Player p) {
+		if (creativeMode && !p.getAbilities().instabuild)return false;
+		return super.canAccess(p);
+	}
+
+	public boolean isAutoSide(Direction d) {
+		return (autoSides & (1 << d.ordinal())) != 0;
+	}
+
+	public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T beIn) {
+		if (!(beIn instanceof VendingMachineBlockEntity be))return;
+		if (level.getGameTime() % 20 != Math.abs(pos.hashCode()) % 20)return;
+		for (Direction d : Direction.values()) {
+			if (be.isAutoSide(d)) {
+				if (be.canInputFrom(d)) {
+					be.pullItemsFrom(pos.relative(d), d.getOpposite());
+				}
+				if (be.canOutput(d)) {
+					be.pushItemsTo(pos.relative(d), d.getOpposite());
+				}
+			}
+		}
+	}
+
+	public void setCreativeMode(boolean b) {
+		this.creativeMode = b;
+		hasInputs = null;
+		setChanged();
 	}
 }

@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.inventory.Slot;
 
-import com.tom.trading.gui.AbstractFilteredMenu;
-import com.tom.trading.gui.AbstractFilteredScreen;
-import com.tom.trading.gui.PhantomSlot;
+import com.tom.trading.menu.AbstractFilteredMenu;
+import com.tom.trading.menu.slot.PhantomSlot;
+import com.tom.trading.screen.AbstractFilteredScreen;
 
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.drag.DraggableStack;

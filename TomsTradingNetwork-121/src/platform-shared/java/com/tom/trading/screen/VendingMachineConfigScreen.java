@@ -1,12 +1,13 @@
-package com.tom.trading.gui;
+package com.tom.trading.screen;
 
 import java.util.EnumMap;
-import java.util.stream.Stream;
 
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.CommonComponents;
@@ -19,8 +20,12 @@ import net.minecraft.world.item.ItemStack;
 
 import com.tom.trading.Content;
 import com.tom.trading.TradingNetworkMod;
+import com.tom.trading.menu.VendingMachineConfigMenu;
+import com.tom.trading.menu.slot.PhantomSlot;
+import com.tom.trading.screen.widget.IOMode;
+import com.tom.trading.screen.widget.IOSideModeButton;
+import com.tom.trading.screen.widget.ToggleButton;
 import com.tom.trading.util.BlockFaceDirection;
-import com.tom.trading.util.ComponentJoiner;
 import com.tom.trading.util.PopupMenuManager;
 import com.tom.trading.util.PopupMenuManager.ButtonElement;
 import com.tom.trading.util.PopupMenuManager.PopupElement;
@@ -28,10 +33,12 @@ import com.tom.trading.util.PopupMenuManager.TextFieldElement;
 
 public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMachineConfigMenu> {
 	private static final ResourceLocation gui = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "textures/gui/vending_machine_config.png");
-	private PlatformEditBox nameBox;
+	private static final ResourceLocation tagBg = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/tag_filter_bg");
+	private EditBox nameBox;
 	private Component title;
-	private EnumMap<BlockFaceDirection, GuiButton> sideCfgButtons = new EnumMap<>(BlockFaceDirection.class);
+	private EnumMap<BlockFaceDirection, IOSideModeButton> sideCfgButtons = new EnumMap<>(BlockFaceDirection.class);
 	private PopupMenuManager popup = new PopupMenuManager(this);
+	private ToggleButton creativeBtn;
 
 	public VendingMachineConfigScreen(VendingMachineConfigMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
@@ -46,7 +53,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 		for (int i = 0;i<8;i++) {
 			Slot s = menu.getSlot(i);
 			if(!s.getItem().isEmpty() && ((menu.matchNBT & (1 << i)) == 0 || s.getItem().getItem() == Content.TAG_FILTER.get())) {
-				gr.blit(gui, this.leftPos + s.x - 1, this.topPos + s.y - 1, 176, 16, 18, 18);
+				gr.blitSprite(tagBg, this.leftPos + s.x - 1, this.topPos + s.y - 1, 18, 18);
 			}
 		}
 
@@ -61,34 +68,35 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 		sideCfgButtons.clear();
 		super.init();
 
-		nameBox = new PlatformEditBox(font, this.leftPos + 7, this.topPos + 7, 110, 16, Component.translatable("narrator.toms_trading_network.vending_machine_name"));
+		nameBox = new EditBox(font, this.leftPos + 7, this.topPos + 7, 110, 16, Component.translatable("narrator.toms_trading_network.vending_machine_name"));
 		this.addRenderableWidget(this.nameBox);
 		nameBox.setValue(title.getString());
 		nameBox.setResponder(this::onNameChanged);
 
 		for(BlockFaceDirection d : BlockFaceDirection.values()) {
 			if(d == BlockFaceDirection.FRONT)continue;
-			GuiButton btn = new GuiButton(this.leftPos + 118 + d.getX() * 16, this.topPos + 30 + d.getY() * 16, 0, b -> {
-				int ns = (getFacingState(d) + 1) % 4;
-				//0b 0 0 0 0    0 0 0  0
-				//0b 0 0 1 d    d d ns ns
-				sendButtonClick(ns | (d.ordinal() << 2) | 0b0010_0000);
-			});
-			btn.texture = gui;
-			btn.texX = 176;
+			IOSideModeButton btn = new IOSideModeButton(this.leftPos + 118 + d.getX() * 16, this.topPos + 30 + d.getY() * 16, d, menu::setSides);
 			sideCfgButtons.put(d, btn);
 			addRenderableWidget(btn);
-			btn.tooltipFactory = s -> Tooltip.create(
-					Stream.of(
-							Component.translatable("tooltip.toms_trading_network.side." + d.name().toLowerCase()),
-							Component.translatable("tooltip.toms_trading_network.side_config" + s)
-							).collect(ComponentJoiner.joining(Component.empty(), Component.literal("\n"))));
+		}
+
+		addRenderableWidget(Button.builder(Component.translatable("button.toms_trading_network.vending_machine.open_trading"), b -> {
+			sendButtonClick(0b0100_0000);
+		}).bounds(this.leftPos + 120, this.topPos + 7, 50, 20).build());
+
+		creativeBtn = addRenderableWidget(ToggleButton.builder(this.leftPos + this.imageWidth - 18, this.topPos - 18).
+				name(Component.translatable("narrator.toms_trading_network.vending_machine.creative_mode")).
+				iconOff(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/creative_off")).
+				iconOn(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/creative_on")).
+				build(s -> {
+					sendButtonClick(0b0010_0000 | (s ? 1 : 0));
+				}));
+		creativeBtn.setTooltip(Tooltip.create(Component.translatable("tooltip.toms_trading_network.creative_mode.off")), Tooltip.create(Component.translatable("tooltip.toms_trading_network.creative_mode.on")));
+
+		if (minecraft.player.getAbilities().instabuild) {
+			addRenderableWidget(creativeBtn);
 		}
 		updateGui();
-
-		addRenderableWidget(new PlatformButton(this.leftPos + 120, this.topPos + 7, 50, 20, Component.translatable("button.toms_trading_network.vending_machine.open_trading"), b -> {
-			sendButtonClick(0b0100_0000);
-		}));
 	}
 
 	private void onNameChanged(String name) {
@@ -131,7 +139,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 			int popupSlot = clicked.getContainerSlot();
 			boolean tagFilter = clicked.getItem().getItem() == Content.TAG_FILTER.get();
 			var tags = clicked.getItem().getTags().toList();
-			nameBox.setFocus(false);
+			nameBox.setFocused(false);
 			popup.open(pMouseX, pMouseY,
 					new TextFieldElement(
 							() -> Component.translatable("tooltip.toms_trading_network.item_count"),
@@ -174,7 +182,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
 		if(popup.keyPressed(pKeyCode, pScanCode, pModifiers))return true;
 		if (pKeyCode == 256) {
-			if(nameBox.isFocused())nameBox.setFocus(false);
+			if(nameBox.isFocused())nameBox.setFocused(false);
 			else this.minecraft.player.closeContainer();
 			return true;
 		} else if(pKeyCode == GLFW.GLFW_KEY_TAB) {
@@ -193,12 +201,24 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	private void updateGui() {
 		for(BlockFaceDirection d : BlockFaceDirection.values()) {
 			if(d == BlockFaceDirection.FRONT)continue;
-			GuiButton b = sideCfgButtons.get(d);
+			IOSideModeButton b = sideCfgButtons.get(d);
 			b.setState(getFacingState(d));
+			b.setAutoMode(isAuto(d));
 		}
+		creativeBtn.setState(menu.creativeMode != 0);
 	}
 
-	private int getFacingState(BlockFaceDirection d) {
-		return ((menu.inputCfg & (1 << d.ordinal())) != 0 ? 1 : 0) | ((menu.outputCfg & (1 << d.ordinal())) != 0 ? 2 : 0);
+	private IOMode getFacingState(BlockFaceDirection d) {
+		boolean input = (menu.inputCfg & (1 << d.ordinal())) != 0;
+		boolean output = (menu.outputCfg & (1 << d.ordinal())) != 0;
+
+		if (input && output)return IOMode.IO;
+		if (input)return IOMode.INPUT;
+		if (output)return IOMode.OUTPUT;
+		return IOMode.OFF;
+	}
+
+	private boolean isAuto(BlockFaceDirection d) {
+		return (menu.autoCfg & (1 << d.ordinal())) != 0;
 	}
 }

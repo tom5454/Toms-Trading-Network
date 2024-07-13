@@ -1,4 +1,6 @@
-package com.tom.trading.gui;
+package com.tom.trading.menu;
+
+import java.util.Locale;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -13,6 +15,7 @@ import com.tom.trading.Content;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
 import com.tom.trading.util.DataSlots;
 import com.tom.trading.util.LimitedContainer;
+import com.tom.trading.util.TradeResult;
 
 public class VendingMachineTradingMenu extends AbstractContainerMenu {
 	private VendingMachineBlockEntityBase machine;
@@ -80,9 +83,9 @@ public class VendingMachineTradingMenu extends AbstractContainerMenu {
 	@Override
 	public boolean clickMenuButton(Player pPlayer, int pId) {
 		for(int i = 0;i<pId;i++) {
-			int r = machine.tradeWith(new LimitedContainer(pPlayer.getInventory(), pPlayer.getInventory().items.size()));
-			if(r != 0) {
-				pPlayer.sendSystemMessage(Component.translatable("chat.toms_trading_network.vending_machine.trade_error", i, pId, Component.translatable("chat.toms_trading_network.vending_machine.trade_error." + r)));
+			TradeResult r = machine.tradeWith(new LimitedContainer(pPlayer.getInventory(), pPlayer.getInventory().items.size()));
+			if(r != TradeResult.SUCCESS) {
+				pPlayer.sendSystemMessage(Component.translatable("chat.toms_trading_network.vending_machine.trade_error", i, pId, Component.translatable("chat.toms_trading_network.vending_machine.trade_error." + r.name().toLowerCase(Locale.ROOT))));
 				break;
 			}
 		}

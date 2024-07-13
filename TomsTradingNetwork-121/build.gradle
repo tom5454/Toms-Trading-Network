@@ -90,11 +90,11 @@ sourceSets {
 	main {
 		java {
 			srcDir "src/platform-shared/java"
-			if(!useLib)exclude "com/tom/trading/jei/**"
+			//if(!useLib)exclude "com/tom/trading/jei/**"
 			if(!useLib)exclude "com/tom/trading/rei/**"
-			if(!useLib)exclude "com/tom/trading/emi/**"
-			if(!useLib)exclude "com/tom/trading/jade/**"
-			if(!useLib)exclude "com/tom/trading/top/**"
+			//if(!useLib)exclude "com/tom/trading/emi/**"
+			//if(!useLib)exclude "com/tom/trading/jade/**"
+			//if(!useLib)exclude "com/tom/trading/top/**"
 		}
 		resources {
 			srcDir "src/platform-shared/resources"
@@ -131,24 +131,24 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    if(useLib) {
-    	compileOnly "mezz.jei:jei-1.20.6-neoforge-api:18.0.0.59"
-    	compileOnly "mezz.jei:jei-1.20.6-common-api:18.0.0.59"
-    	// at runtime, use the full JEI jar
-  		runtimeOnly "mezz.jei:jei-1.20.6-neoforge:18.0.0.59"
     
-    	compileOnly "dev.emi:emi-neoforge:1.1.6+1.20.6:api"
-		runtimeOnly "dev.emi:emi-neoforge:1.1.6+1.20.6"
-	
-		implementation "curse.maven:the-one-probe-245211:5084077"
-  		implementation "curse.maven:jade-324717:5366595"
+    compileOnly "mezz.jei:jei-1.21-neoforge-api:19.5.0.31"
+    compileOnly "mezz.jei:jei-1.21-common-api:19.5.0.31"
+    // at runtime, use the full JEI jar
+  	runtimeOnly "mezz.jei:jei-1.21-neoforge:19.5.0.31"
   	
-    	compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:14.0.688"
-		compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:14.0.688"
-		implementation "me.shedaniel:RoughlyEnoughItems-neoforge:14.0.688"
-		implementation "me.shedaniel.cloth:cloth-config-neoforge:13.0.121"
-    	implementation "dev.architectury:architectury-neoforge:11.0.9"
+  	compileOnly "dev.emi:emi-neoforge:1.1.10+1.21:api"
+	runtimeOnly "dev.emi:emi-neoforge:1.1.10+1.21"
+    
+    if(useLib) {
+    	compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:16.0.729"
+		compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:16.0.729"
+		implementation "me.shedaniel:RoughlyEnoughItems-neoforge:16.0.729"
+		implementation "me.shedaniel.cloth:cloth-config-neoforge:15.0.127"
+    	implementation "dev.architectury:architectury-neoforge:13.0.4"
     }
+    implementation "curse.maven:the-one-probe-245211:5084077"
+    implementation "curse.maven:jade-324717:5493270"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -1,8 +1,11 @@
-package com.tom.trading.gui;
+package com.tom.trading.screen;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+
+import com.tom.trading.gui.PlatformContainerScreen;
+import com.tom.trading.menu.AbstractFilteredMenu;
 
 public abstract class AbstractFilteredScreen<T extends AbstractFilteredMenu> extends PlatformContainerScreen<T> {
 
