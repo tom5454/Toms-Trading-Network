@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.tom.trading.block.AlwaysActivatableBlock;
 import com.tom.trading.network.NetworkHandler;
+import com.tom.trading.tile.OwnableBlockEntity;
 import com.tom.trading.util.IDataReceiver;
 
 public class TradingNetworkMod implements ModInitializer {
@@ -49,5 +51,13 @@ public class TradingNetworkMod implements ModInitializer {
 			return InteractionResult.PASS;
 		});
 		UseBlockCallback.EVENT.addPhaseOrdering(rl, Event.DEFAULT_PHASE);
+
+		PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, be) -> {
+			if (be instanceof OwnableBlockEntity o) {
+				if (!o.canAccess(player) && !player.hasPermissions(2))
+					return false;
+			}
+			return true;
+		});
 	}
 }

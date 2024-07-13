@@ -3,14 +3,18 @@ package com.tom.trading;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
+import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -19,6 +23,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import com.tom.trading.block.AlwaysActivatableBlock;
 import com.tom.trading.network.NetworkHandler;
+import com.tom.trading.tile.OwnableBlockEntity;
+import com.tom.trading.top.TheOneProbeHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TradingNetworkMod.MODID)
@@ -65,8 +71,17 @@ public class TradingNetworkMod {
 		}
 	}
 
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onBreak(BreakEvent event) {
+		BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
+		if (be instanceof OwnableBlockEntity o) {
+			if (!o.canAccess(event.getPlayer()) && !event.getPlayer().hasPermissions(2))
+				event.setCanceled(true);
+		}
+	}
+
 	public void enqueueIMC(InterModEnqueueEvent e) {
-		/*if(ModList.get().isLoaded("theoneprobe"))
-			InterModComms.sendTo("theoneprobe", "getTheOneProbe", () -> TheOneProbeHandler.create());*/
+		if(ModList.get().isLoaded("theoneprobe"))
+			InterModComms.sendTo("theoneprobe", "getTheOneProbe", () -> TheOneProbeHandler.create());
 	}
 }

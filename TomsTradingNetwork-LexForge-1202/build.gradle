@@ -134,7 +134,7 @@ sourceSets {
 	main {
 		java {
 			srcDir "../TomsTradingNetwork-120/src/shared/java"
-			srcDir "../TomsTradingNetwork-120/src/loader-shared/java"
+			srcDir "src/loader-shared/java"
 			srcDir "../TomsTradingNetwork-1202/src/platform-shared/java"
 			if(!useLib)exclude "com/tom/trading/rei/**"
 			exclude "com/tom/trading/top/**"

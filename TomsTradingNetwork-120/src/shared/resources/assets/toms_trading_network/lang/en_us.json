@@ -21,6 +21,10 @@
 	"tooltip.toms_trading_network.item_count": "Item count",
 	"tooltip.toms_trading_network.ignoredNBT": "Accepts matching item with any NBT data",
 	"tooltip.toms_trading_network.to_tag_filter": "Convert to tag filter",
+	"tooltip.toms_trading_network.side_config.auto0": "Auto Push/Pull Off (Shift)",
+	"tooltip.toms_trading_network.side_config.auto1": "Auto Push/Pull On (Shift)",
+	"tooltip.toms_trading_network.creative_mode0": "Creative Vending Off",
+	"tooltip.toms_trading_network.creative_mode1": "Creative Vending On",
 	
 	"narrator.toms_trading_network.vending_machine_name": "Vending Machine Name",
 	"narrator.toms_trading_network.vending_machine.trade_amount": "Trade Amount",

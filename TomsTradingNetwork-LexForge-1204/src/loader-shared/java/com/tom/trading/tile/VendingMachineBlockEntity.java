@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -78,6 +79,58 @@ public class VendingMachineBlockEntity extends VendingMachineBlockEntityBase {
 		@Override
 		public boolean isItemValid(int slot, @NotNull ItemStack stack) {
 			return slot >= inputWr.getSlots() && canInput(stack, dir);
+		}
+	}
+
+	public void pullItemsFrom(BlockPos r, Direction d) {
+		BlockEntity side = level.getBlockEntity(r);
+		if (side != null) {
+			IItemHandler cap = side.getCapability(ForgeCapabilities.ITEM_HANDLER, d).orElse(null);
+			if (cap != null) {
+				for (int i = 0;i<cap.getSlots();i++) {
+					var item = cap.getStackInSlot(i);
+					if (canInputItem(item)) {
+						var ex = cap.extractItem(i, item.getCount(), true);
+						if (ex.isEmpty())continue;
+						var ins = attempInsert(ex, inputWr, true);
+						if (ins.isEmpty() || ins.getCount() != ex.getCount()) {
+							ex = cap.extractItem(i, item.getCount() - ins.getCount(), false);
+							ins = attempInsert(ex, inputWr, false);
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private ItemStack attempInsert(ItemStack stack, IItemHandler d, boolean simulate) {
+		ItemStack is = stack.copy();
+		for (int i = 0;i<d.getSlots();i++) {
+			var res = d.insertItem(i, is, simulate);
+			if (res.isEmpty())
+				return ItemStack.EMPTY;
+			res = is;
+		}
+		return is;
+	}
+
+	public void pushItemsTo(BlockPos r, Direction d) {
+		BlockEntity side = level.getBlockEntity(r);
+		if (side != null) {
+			IItemHandler cap = side.getCapability(ForgeCapabilities.ITEM_HANDLER, d).orElse(null);
+			if (cap != null) {
+				for (int i = 0;i<outputWr.getSlots();i++) {
+					ItemStack item = outputWr.getStackInSlot(i);
+					if(item.isEmpty())continue;
+					var ins = attempInsert(item, cap, true);
+					if (ins.isEmpty() || ins.getCount() != item.getCount()) {
+						var ex = outputWr.extractItem(i, item.getCount() - ins.getCount(), false);
+						ins = attempInsert(ex, cap, false);
+						return;
+					}
+				}
+			}
 		}
 	}
 }

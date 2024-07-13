@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import com.tom.trading.Content;
 import com.tom.trading.network.NetworkHandler;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
+import com.tom.trading.util.BlockFaceDirection;
 import com.tom.trading.util.DataSlots;
 import com.tom.trading.util.IDataReceiver;
 
@@ -23,7 +24,7 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 	private VendingMachineBlockEntityBase machine;
 	protected final Inventory pinv;
 
-	public int inputCfg, outputCfg, matchNBT;
+	public int inputCfg, outputCfg, autoCfg, matchNBT, creativeMode;
 	public Runnable updateGui;
 
 	public VendingMachineConfigMenu(int pContainerId, Inventory pPlayerInventory) {
@@ -32,6 +33,8 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 		addDataSlot(DataSlots.set(c -> inputCfg = c).onUpdate(this::updateGui));
 		addDataSlot(DataSlots.set(c -> outputCfg = c).onUpdate(this::updateGui));
 		addDataSlot(DataSlots.set(c -> matchNBT = c));
+		addDataSlot(DataSlots.set(c -> autoCfg = c).onUpdate(this::updateGui));
+		addDataSlot(DataSlots.set(c -> creativeMode = c).onUpdate(this::updateGui));
 	}
 
 	public VendingMachineConfigMenu(int pContainerId, Inventory pPlayerInventory, VendingMachineBlockEntityBase machine) {
@@ -41,6 +44,8 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 		addDataSlot(DataSlots.get(machine::getInputSides));
 		addDataSlot(DataSlots.get(machine::getOutputSides));
 		addDataSlot(DataSlots.get(machine::getMatchNBT));
+		addDataSlot(DataSlots.get(machine::getAutoSides));
+		addDataSlot(DataSlots.get(() -> machine.isCreativeMode() ? 1 : 0));
 	}
 
 	private VendingMachineConfigMenu(int pContainerId, Inventory pPlayerInventory, Container input, Container output, Container config) {
@@ -136,7 +141,7 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 
 	@Override
 	public boolean stillValid(Player pPlayer) {
-		return machine != null ? machine.isInRange(pPlayer) : true;
+		return machine != null ? machine.isInRange(pPlayer) && machine.canAccess(pPlayer) : true;
 	}
 
 	@Override
@@ -165,15 +170,14 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 				}
 			});
 			return true;
+		} else if((pId & 0b1110_0000) == 0b0010_0000) {
+			if (pPlayer.getAbilities().instabuild) {
+				machine.setCreativeMode((pId & 1) != 0);
+			}
 		} else if((pId & 0b0110_0000) == 0b0110_0000) {
 			int slot = pId & 0xf;
 			boolean c = (pId & 0b0001_0000) != 0;
 			machine.setMatchNBT(slot, c);
-			return true;
-		} else if((pId & 0b0010_0000) == 0b0010_0000) {
-			int c = pId & 0b11;
-			int id = (pId >> 2) & 0b111;
-			machine.setSides(id, c);
 			return true;
 		}
 		return false;
@@ -208,6 +212,12 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 				}
 			}
 		}
+		if(tag.contains("setSide")) {
+			int side = tag.getByte("setSide");
+			int mode = tag.getByte("mode");
+			boolean auto = tag.getBoolean("auto");
+			machine.setSides(side, mode, auto);
+		}
 	}
 
 	public void setConfigCount(Slot slot, int count) {
@@ -222,6 +232,14 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 	public void setName(String name) {
 		CompoundTag tag = new CompoundTag();
 		tag.putString("setName", name);
+		NetworkHandler.sendDataToServer(tag);
+	}
+
+	public void setSides(BlockFaceDirection dir, int newState, boolean auto) {
+		CompoundTag tag = new CompoundTag();
+		tag.putByte("setSide", (byte) dir.ordinal());
+		tag.putByte("mode", (byte) newState);
+		tag.putBoolean("auto", auto);
 		NetworkHandler.sendDataToServer(tag);
 	}
 

@@ -6,8 +6,10 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.FilteringStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
@@ -15,6 +17,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+
+import com.google.common.base.Predicates;
 
 public class VendingMachineBlockEntity extends VendingMachineBlockEntityBase implements SidedStorageBlockEntity {
 	private EnumMap<Direction, Handler> itemCaps = new EnumMap<>(Direction.class);
@@ -61,5 +65,15 @@ public class VendingMachineBlockEntity extends VendingMachineBlockEntityBase imp
 		public boolean supportsExtraction() {
 			return canOutput(dir) && super.supportsExtraction();
 		}
+	}
+
+	public void pullItemsFrom(BlockPos relative, Direction opposite) {
+		Storage<ItemVariant> handler = ItemStorage.SIDED.find(level, relative, opposite);
+		StorageUtil.move(handler, inputWr, f -> canInputItem(f.toStack()), 64, null);
+	}
+
+	public void pushItemsTo(BlockPos relative, Direction opposite) {
+		Storage<ItemVariant> handler = ItemStorage.SIDED.find(level, relative, opposite);
+		StorageUtil.move(outputWr, handler, Predicates.alwaysTrue(), 64, null);
 	}
 }

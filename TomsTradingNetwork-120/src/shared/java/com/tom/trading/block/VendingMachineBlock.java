@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,6 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import com.tom.trading.tile.OwnableBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntity;
+import com.tom.trading.tile.VendingMachineBlockEntityBase;
 
 public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActivatableBlock {
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -95,5 +98,11 @@ public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActiva
 
 			super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
 		}
+	}
+
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		if (level.isClientSide)return null;
+		return VendingMachineBlockEntityBase::tick;
 	}
 }

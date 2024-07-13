@@ -32,6 +32,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	private Component title;
 	private EnumMap<BlockFaceDirection, GuiButton> sideCfgButtons = new EnumMap<>(BlockFaceDirection.class);
 	private PopupMenuManager popup = new PopupMenuManager(this);
+	private GuiButton creativeBtn;
 
 	public VendingMachineConfigScreen(VendingMachineConfigMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
@@ -69,10 +70,12 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 		for(BlockFaceDirection d : BlockFaceDirection.values()) {
 			if(d == BlockFaceDirection.FRONT)continue;
 			GuiButton btn = new GuiButton(this.leftPos + 118 + d.getX() * 16, this.topPos + 30 + d.getY() * 16, 0, b -> {
-				int ns = (getFacingState(d) + 1) % 4;
-				//0b 0 0 0 0    0 0 0  0
-				//0b 0 0 1 d    d d ns ns
-				sendButtonClick(ns | (d.ordinal() << 2) | 0b0010_0000);
+				int ns = getFacingState(d);
+				if (hasShiftDown()) {
+					menu.setSides(d, ns, !isAuto(d));
+				} else {
+					menu.setSides(d, (ns + 1) % 4, isAuto(d));
+				}
 			});
 			btn.texture = gui;
 			btn.texX = 176;
@@ -81,14 +84,27 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 			btn.tooltipFactory = s -> Tooltip.create(
 					Stream.of(
 							Component.translatable("tooltip.toms_trading_network.side." + d.name().toLowerCase()),
-							Component.translatable("tooltip.toms_trading_network.side_config" + s)
+							Component.translatable("tooltip.toms_trading_network.side_config" + s),
+							Component.translatable("tooltip.toms_trading_network.side_config.auto" + (btn.texY == 34 ? 1 : 0))
 							).collect(ComponentJoiner.joining(Component.empty(), Component.literal("\n"))));
 		}
-		updateGui();
 
 		addRenderableWidget(new PlatformButton(this.leftPos + 120, this.topPos + 7, 50, 20, Component.translatable("button.toms_trading_network.vending_machine.open_trading"), b -> {
 			sendButtonClick(0b0100_0000);
 		}));
+
+		creativeBtn = new GuiButton(this.leftPos + this.imageWidth - 18, this.topPos - 18, 0, b -> {
+			sendButtonClick(0b0010_0000 | ((creativeBtn.getState() + 1) % 2));
+		});
+		creativeBtn.texture = gui;
+		creativeBtn.texX = 176;
+		creativeBtn.texY = 50;
+		creativeBtn.tooltipFactory = s -> Tooltip.create(Component.translatable("tooltip.toms_trading_network.creative_mode" + s));
+
+		if (minecraft.player.getAbilities().instabuild) {
+			addRenderableWidget(creativeBtn);
+		}
+		updateGui();
 	}
 
 	private void onNameChanged(String name) {
@@ -194,11 +210,17 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 		for(BlockFaceDirection d : BlockFaceDirection.values()) {
 			if(d == BlockFaceDirection.FRONT)continue;
 			GuiButton b = sideCfgButtons.get(d);
+			b.texY = isAuto(d) ? 34 : 0;
 			b.setState(getFacingState(d));
 		}
+		creativeBtn.setState(menu.creativeMode);
 	}
 
 	private int getFacingState(BlockFaceDirection d) {
 		return ((menu.inputCfg & (1 << d.ordinal())) != 0 ? 1 : 0) | ((menu.outputCfg & (1 << d.ordinal())) != 0 ? 2 : 0);
+	}
+
+	private boolean isAuto(BlockFaceDirection d) {
+		return (menu.autoCfg & (1 << d.ordinal())) != 0;
 	}
 }
