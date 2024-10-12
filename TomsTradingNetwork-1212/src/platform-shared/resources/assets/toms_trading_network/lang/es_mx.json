@@ -1,0 +1,46 @@
+{
+	"block.toms_trading_network.vending_machine": "Máquina expendedora",
+	
+	"item.toms_trading_network.tag_filter": "Coincide con etiqueta:",
+	
+	"itemGroup.toms_trading_network.tab": "Tom's Trading Network",
+	
+	"tooltip.toms_trading_network.hold_shift_for_info": "Mantén presionada la tecla SHIFT para obtener más información.",
+	"tooltip.toms_trading_network.side.bottom": "Inferior",
+	"tooltip.toms_trading_network.side.top": "Superior",
+	"tooltip.toms_trading_network.side.front": "Frontal",
+	"tooltip.toms_trading_network.side.left": "Izquierda",
+	"tooltip.toms_trading_network.side.back": "Trasera",
+	"tooltip.toms_trading_network.side.right": "Derecha",
+	"tooltip.toms_trading_network.side_config.off": "Sin acceso",
+	"tooltip.toms_trading_network.side_config.input": "Solo inserción",
+	"tooltip.toms_trading_network.side_config.output": "Solo extracción",
+	"tooltip.toms_trading_network.side_config.io": "Inserción y extracción",
+	"tooltip.toms_trading_network.match_nbt": "Coincidir NBT: %s",
+	"tooltip.toms_trading_network.textfield": "%s: %s",
+	"tooltip.toms_trading_network.item_count": "Cantidad de objetos",
+	"tooltip.toms_trading_network.ignoredNBT": "Acepta objetos coincidentes con cualquier dato NBT",
+	"tooltip.toms_trading_network.to_tag_filter": "Convertir a filtro de etiqueta",
+	
+	"narrator.toms_trading_network.vending_machine_name": "Nombre de la máquina expendedora",
+	"narrator.toms_trading_network.vending_machine.trade_amount": "Cantidad de intercambio",
+	
+	"button.toms_trading_network.vending_machine.open_trading": "Ver intercambio",
+	"button.toms_trading_network.vending_machine.trade": "Intercambiar",
+	
+	"label.toms_trading_network.vending_machine.cost": "Costo",
+	"label.toms_trading_network.vending_machine.result": "Resultado",
+	"label.toms_trading_network.vending_machine.input": "Entrada",
+	"label.toms_trading_network.vending_machine.output": "Salida",
+	"label.toms_trading_network.vending_machine.noItems": "No hay suficientes objetos en stock",
+	
+	"chat.toms_trading_network.vending_machine.trade_error": "Error en la transacción de la máquina expendedora (%d finalizados de %d): %s",
+	"chat.toms_trading_network.vending_machine.trade_error.trader_missing_input": "No hay suficientes objetos en tu inventario",
+	"chat.toms_trading_network.vending_machine.trade_error.machine_missing_input": "No hay suficientes objetos en la máquina expendedora",
+	"chat.toms_trading_network.vending_machine.trade_error.trader_no_space": "No hay suficiente espacio en tu inventario",
+	"chat.toms_trading_network.vending_machine.trade_error.machine_no_space": "No hay suficiente espacio en la máquina expendedora",
+	
+	"config.jade.plugin_toms_trading_network.vending_machine": "Información de la máquina expendedora",
+	
+	"jade.toms_trading_network.noServerInfo": "Detalles no disponibles"
+}
