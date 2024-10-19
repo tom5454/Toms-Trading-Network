@@ -12,8 +12,8 @@ import com.tom.trading.Content;
 
 public class TagFilterItem extends Item {
 
-	public TagFilterItem() {
-		super(new Item.Properties());
+	public TagFilterItem(Item.Properties pr) {
+		super(pr);
 	}
 
 	@Override

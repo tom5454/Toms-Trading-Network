@@ -1,7 +1,8 @@
 package com.tom.trading;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -12,9 +13,12 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.MenuType.MenuSupplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 
 import com.tom.trading.block.VendingMachineBlock;
 import com.tom.trading.item.TagFilterItem;
@@ -24,10 +28,11 @@ import com.tom.trading.tile.VendingMachineBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
 import com.tom.trading.util.GameObject;
 import com.tom.trading.util.GameObject.GameObjectBlockEntity;
+import com.tom.trading.util.GameObject.GameRegistryBE.BEFactory;
 
 public class Content {
-	public static final GameObject<VendingMachineBlock> VENDING_MACHINE = blockWithItem("vending_machine", VendingMachineBlock::new);
-	public static final GameObject<TagFilterItem> TAG_FILTER = Platform.ITEMS.register("tag_filter", TagFilterItem::new);
+	public static final GameObject<VendingMachineBlock> VENDING_MACHINE = blockWithItem("vending_machine", VendingMachineBlock::new, p -> p.mapColor(MapColor.METAL).sound(SoundType.METAL).requiresCorrectToolForDrops().strength(5).lightLevel(s -> 8));
+	public static final GameObject<TagFilterItem> TAG_FILTER = itemNoTab("tag_filter", TagFilterItem::new, p -> p);
 
 	public static final GameObjectBlockEntity<VendingMachineBlockEntityBase> VENDING_MACHINE_TILE = blockEntity("vending_machine.tile", VendingMachineBlockEntity::new, VENDING_MACHINE);
 
@@ -36,23 +41,27 @@ public class Content {
 
 	public static final GameObject<DataComponentType<TagKey<Item>>> TAG_COMPONENT = Platform.DATA_COMPONENT_TYPES.register("tag", () -> DataComponentType.<TagKey<Item>>builder().persistent(TagKey.codec(Registries.ITEM)).build());
 
-	private static <B extends Block> GameObject<B> blockWithItem(String name, Supplier<B> create) {
-		return blockWithItem(name, create, b -> new BlockItem(b, new Item.Properties()));
+	private static <B extends Block> GameObject<B> blockWithItem(String name, Function<BlockBehaviour.Properties, B> create, UnaryOperator<BlockBehaviour.Properties> defaultProps) {
+		return blockWithItem(name, create, BlockItem::new, defaultProps, UnaryOperator.identity());
 	}
 
-	private static <B extends Block, I extends Item> GameObject<B> blockWithItem(String name, Supplier<B> create, Function<Block, I> createItem) {
-		GameObject<B> re = Platform.BLOCKS.register(name, create);
-		item(name, () -> createItem.apply(re.get()));
+	private static <B extends Block, I extends Item> GameObject<B> blockWithItem(String name, Function<BlockBehaviour.Properties, B> create, BiFunction<Block, Item.Properties, I> createItem, UnaryOperator<BlockBehaviour.Properties> defaultProps, UnaryOperator<Item.Properties> defaultItemProps) {
+		GameObject<B> re = Platform.BLOCKS.register(name, k -> create.apply(defaultProps.apply(BlockBehaviour.Properties.of().setId(k))));
+		item(name, p -> createItem.apply(re.get(), p), p -> defaultItemProps.apply(p.useBlockDescriptionPrefix()));
 		return re;
 	}
 
-	private static <I extends Item> GameObject<I> item(String name, Supplier<I> fact) {
-		return Platform.ITEMS.register(name, () -> Platform.addItemToTab(fact.get()));
+	private static <I extends Item> GameObject<I> item(String name, Function<Item.Properties, I> fact, UnaryOperator<Item.Properties> defaultProps) {
+		return itemNoTab(name, p -> Platform.addItemToTab(fact.apply(p)), defaultProps);
+	}
+
+	private static <I extends Item> GameObject<I> itemNoTab(String name, Function<Item.Properties, I> fact, UnaryOperator<Item.Properties> defaultProps) {
+		return Platform.ITEMS.register(name, k -> fact.apply(defaultProps.apply(new Properties().setId(k))));
 	}
 
 	@SuppressWarnings("unchecked")
 	@SafeVarargs
-	private static <BE extends BlockEntity> GameObjectBlockEntity<BE> blockEntity(String name, BlockEntitySupplier<? extends BE> create, GameObject<? extends Block>... blocks) {
+	private static <BE extends BlockEntity> GameObjectBlockEntity<BE> blockEntity(String name, BEFactory<? extends BE> create, GameObject<? extends Block>... blocks) {
 		return (GameObjectBlockEntity<BE>) Platform.BLOCK_ENTITY.registerBE(name, create, blocks);
 	}
 

@@ -28,7 +28,11 @@ public class TradingNetworkMod implements ModInitializer {
 		LOGGER.info("Tom's Trading Network starting");
 		Content.init();
 
-		Platform.BLOCK_ENTITY.register();
+		Platform.DATA_COMPONENT_TYPES.runRegistration();
+		Platform.BLOCKS.runRegistration();
+		Platform.ITEMS.runRegistration();
+		Platform.BLOCK_ENTITY.runRegistration();
+		Platform.MENU_TYPE.runRegistration();
 
 		PayloadTypeRegistry.playS2C().register(DataPacket.ID, DataPacket.STREAM_CODEC);
 		PayloadTypeRegistry.playC2S().register(DataPacket.ID, DataPacket.STREAM_CODEC);

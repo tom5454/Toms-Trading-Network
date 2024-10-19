@@ -1,6 +1,7 @@
 package com.tom.trading.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -15,13 +16,11 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import com.mojang.serialization.MapCodec;
@@ -30,11 +29,11 @@ import com.tom.trading.tile.OwnableBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntity;
 
 public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActivatableBlock {
-	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-	public static final MapCodec<VendingMachineBlock> CODEC = ChestBlock.simpleCodec(properties -> new VendingMachineBlock());
+	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+	public static final MapCodec<VendingMachineBlock> CODEC = ChestBlock.simpleCodec(VendingMachineBlock::new);
 
-	public VendingMachineBlock() {
-		super(Block.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).requiresCorrectToolForDrops().strength(5).lightLevel(s -> 8));
+	public VendingMachineBlock(Block.Properties pr) {
+		super(pr);
 	}
 
 	@Override

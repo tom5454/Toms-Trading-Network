@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -48,16 +49,16 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 
 	@Override
 	protected void renderBg(GuiGraphics gr, float pPartialTick, int pMouseX, int pMouseY) {
-		gr.blit(gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+		gr.blit(RenderType::guiTextured, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
 		for (int i = 0;i<8;i++) {
 			Slot s = menu.getSlot(i);
 			if(!s.getItem().isEmpty() && ((menu.matchNBT & (1 << i)) == 0 || s.getItem().getItem() == Content.TAG_FILTER.get())) {
-				gr.blitSprite(tagBg, this.leftPos + s.x - 1, this.topPos + s.y - 1, 18, 18);
+				gr.blitSprite(RenderType::guiTextured, tagBg, this.leftPos + s.x - 1, this.topPos + s.y - 1, 18, 18);
 			}
 		}
 
-		gr.blit(this.leftPos + 134, this.topPos + 46, 0, 16, 16, minecraft.getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")));
+		gr.blitSprite(RenderType::guiTextured, minecraft.getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
 	}
 
 	@Override

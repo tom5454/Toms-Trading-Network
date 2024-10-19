@@ -3,94 +3,97 @@ package com.tom.trading.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
+import net.minecraft.world.level.block.state.BlockState;
 
 import com.tom.trading.TradingNetworkMod;
 
 public class GameObject<T> {
 	private final ResourceLocation id;
-	private final T value;
+	private final Supplier<? extends T> sup;
+	private T value;
 
-	private GameObject(ResourceLocation id, T value) {
+	private GameObject(ResourceLocation id,Supplier<? extends T> sup) {
 		this.id = id;
-		this.value = value;
+		this.sup = sup;
 	}
-
-	/*public static <V, T extends V> GameObject<T> register(Registry<V> registry, ResourceLocation resourceLocation, T value) {
-		Registry.register(registry, resourceLocation, value);
-		return new GameObject<>(value);
-	}*/
 
 	public T get() {
 		return value;
 	}
 
-	public ResourceLocation getId() {
-		return id;
+	protected T make() {
+		value = sup.get();
+		return value;
 	}
 
 	public static class GameRegistry<T> {
 		protected final Registry<T> registry;
+		protected List<GameObject<? extends T>> toRegister = new ArrayList<>();
 
 		public GameRegistry(Registry<T> registry) {
 			this.registry = registry;
 		}
 
 		public <I extends T> GameObject<I> register(final String name, final Supplier<? extends I> sup) {
-			I obj = sup.get();
-			ResourceLocation id = ResourceLocation.tryBuild(TradingNetworkMod.MODID, name);
-			Registry.register(registry, id, obj);
-			return new GameObject<>(id, obj);
+			GameObject<I> obj = new GameObject<>(ResourceLocation.tryBuild(TradingNetworkMod.MODID, name), sup);
+			toRegister.add(obj);
+			return obj;
+		}
+
+		public <I extends T> GameObject<I> register(final String name, final Function<ResourceKey<T>, ? extends I> sup) {
+			ResourceKey<T> key = ResourceKey.create(registry.key(), ResourceLocation.tryBuild(TradingNetworkMod.MODID, name));
+			GameObject<I> obj = new GameObject<>(key.location(), () -> sup.apply(key));
+			toRegister.add(obj);
+			return obj;
+		}
+
+		public void runRegistration() {
+			for (GameObject<? extends T> gameObject : toRegister) {
+				Registry.register(registry, gameObject.getId(), gameObject.make());
+			}
 		}
 	}
 
+	public ResourceLocation getId() {
+		return id;
+	}
+
 	public static class GameRegistryBE extends GameRegistry<BlockEntityType<?>> {
-		private List<GameObjectBlockEntity<?>> blockEntities = new ArrayList<>();
 
 		public GameRegistryBE(Registry<BlockEntityType<?>> registry) {
 			super(registry);
 		}
 
 		@SuppressWarnings("unchecked")
-		public <BE extends BlockEntity, I extends BlockEntityType<BE>> GameObjectBlockEntity<BE> registerBE(String name, BlockEntitySupplier<BE> sup, GameObject<? extends Block>... blocks) {
-			GameObjectBlockEntity<BE> e = new GameObjectBlockEntity<>(this, name, new ArrayList<>(Arrays.asList(blocks)), sup);
-			blockEntities.add(e);
+		public <BE extends BlockEntity, I extends BlockEntityType<BE>> GameObjectBlockEntity<BE> registerBE(String name, BEFactory<BE> sup, GameObject<? extends Block>... blocks) {
+			GameObjectBlockEntity<BE> e = new GameObjectBlockEntity<>(name, new ArrayList<>(Arrays.asList(blocks)), sup::create);
+			toRegister.add(e);
 			return e;
 		}
 
-		public void register() {
-			blockEntities.forEach(GameObjectBlockEntity::register);
+		@FunctionalInterface
+		public interface BEFactory<T extends BlockEntity> {
+			T create(BlockPos blockPos, BlockState blockState);
 		}
 	}
 
 	public static class GameObjectBlockEntity<T extends BlockEntity> extends GameObject<BlockEntityType<T>> {
-		private BlockEntityType<T> value;
 		private List<GameObject<? extends Block>> blocks;
-		private BlockEntitySupplier<T> factory;
-		private GameRegistryBE registry;
 
-		public GameObjectBlockEntity(GameRegistryBE registry, String name, List<GameObject<? extends Block>> blocks, BlockEntitySupplier<T> factory) {
-			super(ResourceLocation.tryBuild(TradingNetworkMod.MODID, name), null);
+		public GameObjectBlockEntity(String name, List<GameObject<? extends Block>> blocks, FabricBlockEntityTypeBuilder.Factory<T> factory) {
+			super(ResourceLocation.tryBuild(TradingNetworkMod.MODID, name), () -> FabricBlockEntityTypeBuilder.<T>create(factory, blocks.stream().map(GameObject::get).toArray(Block[]::new)).build());
 			this.blocks = blocks;
-			this.factory = factory;
-			this.registry = registry;
-		}
-
-		protected void register() {
-			value = BlockEntityType.Builder.<T>of(factory, blocks.stream().map(GameObject::get).toArray(Block[]::new)).build(null);
-			Registry.register(registry.registry, getId(), value);
-		}
-
-		@Override
-		public BlockEntityType<T> get() {
-			return value;
 		}
 
 		@SuppressWarnings("unchecked")
