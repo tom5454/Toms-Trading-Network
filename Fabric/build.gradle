@@ -92,14 +92,14 @@ sourceSets {
             ]
         }
 		java {
-			srcDir "../TomsTradingNetwork-121/src/platform-shared/java"
+			srcDir "../NeoForge/src/platform-shared/java"
 			//if(!useLib)exclude "com/tom/trading/jei/**"
 			//if(!useLib)exclude "com/tom/trading/rei/**"
 			//if(!useLib)exclude "com/tom/trading/emi/**"
 			//if(!useLib)exclude "com/tom/trading/jade/**"
 		}
 		resources {
-			srcDir "../TomsTradingNetwork-121/src/platform-shared/resources"
+			srcDir "../NeoForge/src/platform-shared/resources"
 		}
     }
 }

@@ -1,0 +1,35 @@
+{
+  "type": "neoforge",
+  "name": "toms_trading_network-1.21",
+  "mcVer": "1.21",
+  "verId": "1.21",
+  "display": "[NeoForge] Tom's Trading Network 1.21",
+  "git": "Toms-Trading-Network/TomsTradingNetwork-121",
+  "subver": [
+	"1.21",
+    "1.21.1"
+  ],
+  "j21": true,
+  "depProjects": [
+	  {
+      "slug": "jade",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "the-one-probe",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "roughly-enough-items",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "jei",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "emi",
+      "type": "optionalDependency"
+    }
+  ]
+}

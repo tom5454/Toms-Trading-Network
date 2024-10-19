@@ -1,0 +1,31 @@
+{
+  "type": "fabric",
+  "name": "toms_trading_network-fabric-1.21",
+  "mcVer": "1.21",
+  "verId": "1.21",
+  "display": "[Fabric] Tom's Trading Network 1.21",
+  "git": "Toms-Trading-Network/TomsTradingNetworkFabric-121",
+  "subver": [
+	"1.21"
+  ],
+  "j21": true,
+  "appendMCVersion": false,
+  "depProjects": [
+	  {
+      "slug": "jade",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "roughly-enough-items",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "jei",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "emi",
+      "type": "optionalDependency"
+    }
+  ]
+}
