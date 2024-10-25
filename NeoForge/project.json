@@ -4,7 +4,7 @@
   "mcVer": "1.21",
   "verId": "1.21",
   "display": "[NeoForge] Tom's Trading Network 1.21",
-  "git": "Toms-Trading-Network/TomsTradingNetwork-121",
+  "onGit": true,
   "subver": [
 	"1.21",
     "1.21.1"
