@@ -5,9 +5,16 @@
 		"1.20.4-latest": "0.3.1",
 		"1.20.5-latest": "0.3.1",
 		"1.20.6-latest": "0.3.1",
-		"1.21-latest": "0.3.1"
+		"1.21-latest": "0.3.2",
+		"1.21.1-latest": "0.3.2"
+	},
+	"1.21.1": {
+		"0.3.2": "Fixed auto push/pull not working",
+		"0.3.1": "Fixed insertion check not working",
+		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode"
 	},
 	"1.21": {
+		"0.3.2": "Fixed auto push/pull not working",
 		"0.3.1": "Fixed insertion check not working",
 		"0.3.0": "Added Push/Pull mode to the io configuration\nAdded breaking protection to the Vending Machines\nAdded Creative Vending Mode",
 		"0.2.13": "Fixed vending machine not dropping",
