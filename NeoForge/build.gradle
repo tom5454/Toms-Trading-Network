@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.userdev' version '7.0.165'
 }
 
 version = mod_version
@@ -28,7 +28,7 @@ repositories {
 }
 
 base {
-    archivesName = 'toms_trading_network-1.21'
+    archivesName = 'toms_trading_network-1.21.3'
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -65,7 +65,7 @@ runs {
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
+        arguments '--nogui'
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -80,7 +80,7 @@ runs {
         // workingDirectory project.file('run-data')
 
         // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        arguments '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -90,11 +90,11 @@ sourceSets {
 	main {
 		java {
 			srcDir "src/platform-shared/java"
-			//if(!useLib)exclude "com/tom/trading/jei/**"
+			if(!useLib)exclude "com/tom/trading/jei/**"
 			if(!useLib)exclude "com/tom/trading/rei/**"
-			//if(!useLib)exclude "com/tom/trading/emi/**"
-			//if(!useLib)exclude "com/tom/trading/jade/**"
-			//if(!useLib)exclude "com/tom/trading/top/**"
+			if(!useLib)exclude "com/tom/trading/emi/**"
+			if(!useLib)exclude "com/tom/trading/jade/**"
+			if(!useLib)exclude "com/tom/trading/top/**"
 		}
 		resources {
 			srcDir "src/platform-shared/resources"
@@ -132,23 +132,25 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    compileOnly "mezz.jei:jei-1.21-neoforge-api:19.5.0.31"
-    compileOnly "mezz.jei:jei-1.21-common-api:19.5.0.31"
-    // at runtime, use the full JEI jar
-  	runtimeOnly "mezz.jei:jei-1.21-neoforge:19.5.0.31"
-  	
-  	compileOnly "dev.emi:emi-neoforge:1.1.10+1.21:api"
-	runtimeOnly "dev.emi:emi-neoforge:1.1.10+1.21"
-    
     if(useLib) {
+    	compileOnly "mezz.jei:jei-1.21-neoforge-api:19.5.0.31"
+    	compileOnly "mezz.jei:jei-1.21-common-api:19.5.0.31"
+    	// at runtime, use the full JEI jar
+  		runtimeOnly "mezz.jei:jei-1.21-neoforge:19.5.0.31"
+  	
+  		compileOnly "dev.emi:emi-neoforge:1.1.10+1.21:api"
+		runtimeOnly "dev.emi:emi-neoforge:1.1.10+1.21"
+		
+		implementation "curse.maven:the-one-probe-245211:5084077"
+    	implementation "curse.maven:jade-324717:5493270"
+	
     	compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:16.0.729"
 		compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:16.0.729"
 		implementation "me.shedaniel:RoughlyEnoughItems-neoforge:16.0.729"
 		implementation "me.shedaniel.cloth:cloth-config-neoforge:15.0.127"
     	implementation "dev.architectury:architectury-neoforge:13.0.4"
     }
-    implementation "curse.maven:the-one-probe-245211:5084077"
-    implementation "curse.maven:jade-324717:5493270"
+   
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
