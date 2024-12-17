@@ -50,6 +50,6 @@ A simple mod to make trading with players easier
 [[dependencies.toms_trading_network]]
     modId="minecraft"
     type="required"
-    versionRange="[1.21.2,1.22)"
+    versionRange="[1.21.4,1.22)"
     ordering="NONE"
     side="BOTH"

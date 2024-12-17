@@ -10,12 +10,12 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -58,7 +58,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 			}
 		}
 
-		gr.blitSprite(RenderType::guiTextured, minecraft.getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
+		gr.blitSprite(RenderType::guiTextured, minecraft.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
 	}
 
 	@Override
