@@ -150,7 +150,6 @@ dependencies {
 		implementation "me.shedaniel.cloth:cloth-config-neoforge:15.0.127"
     	implementation "dev.architectury:architectury-neoforge:13.0.4"
     }
-   
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -218,6 +218,13 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		return (outputSides & (1 << d.ordinal())) != 0;
 	}
 
+	public boolean isAutoSide(Direction dir) {
+		Direction facing = getBlockState().getValue(VendingMachineBlock.FACING);
+		BlockFaceDirection d = BlockFaceDirection.getHorizontalFace(facing, dir);
+		if(d == BlockFaceDirection.FRONT)return false;
+		return (autoSides & (1 << d.ordinal())) != 0;
+	}
+
 	public boolean isInRange(Player pPlayer) {
 		return !remove && pPlayer.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64.0D;
 	}
@@ -338,10 +345,6 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	public boolean canAccess(Player p) {
 		if (creativeMode && !p.getAbilities().instabuild)return false;
 		return super.canAccess(p);
-	}
-
-	public boolean isAutoSide(Direction d) {
-		return (autoSides & (1 << d.ordinal())) != 0;
 	}
 
 	public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T beIn) {
