@@ -83,7 +83,7 @@ public class VendingMachineTradingMenu extends AbstractContainerMenu {
 	@Override
 	public boolean clickMenuButton(Player pPlayer, int pId) {
 		for(int i = 0;i<pId;i++) {
-			TradeResult r = machine.tradeWith(new LimitedContainer(pPlayer.getInventory(), pPlayer.getInventory().items.size()));
+			TradeResult r = machine.tradeWith(new LimitedContainer(pPlayer.getInventory(), pPlayer.getInventory().getNonEquipmentItems().size()));
 			if(r != TradeResult.SUCCESS) {
 				pPlayer.displayClientMessage(Component.translatable("chat.toms_trading_network.vending_machine.trade_error", i, pId, Component.translatable("chat.toms_trading_network.vending_machine.trade_error." + r.name().toLowerCase(Locale.ROOT))), false);
 				break;

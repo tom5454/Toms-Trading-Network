@@ -2,7 +2,6 @@ package com.tom.trading.jade;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item.TooltipContext;
@@ -41,8 +40,8 @@ public enum VendingMachineProvider implements IBlockComponentProvider, IServerDa
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
 		if (accessor.getServerData().contains("config")) {
 			BasicContainer c = new BasicContainer(8);
-			c.fromTag(accessor.getServerData().getList("config", Tag.TAG_COMPOUND), Minecraft.getInstance().level.registryAccess());
-			byte state = accessor.getServerData().getByte("state");
+			c.fromTag(accessor.getServerData().getListOrEmpty("config"), Minecraft.getInstance().level.registryAccess());
+			byte state = accessor.getServerData().getByteOr("state", (byte) 0);
 			IElementHelper elements = IElementHelper.get();
 			if(accessor.showDetails()) {
 				ITooltip t = elements.tooltip();

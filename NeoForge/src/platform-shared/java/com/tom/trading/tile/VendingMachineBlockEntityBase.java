@@ -7,11 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Inventory;
@@ -56,17 +56,15 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	@Override
 	public void loadAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
 		super.loadAdditional(pTag, provider);
-		inputs.fromTag(pTag.getList("Inputs", Tag.TAG_COMPOUND), provider);
-		outputs.fromTag(pTag.getList("Outputs", Tag.TAG_COMPOUND), provider);
-		config.fromTag(pTag.getList("Config", Tag.TAG_COMPOUND), provider);
-		inputSides = pTag.getInt("inputSides");
-		outputSides = pTag.getInt("outputSides");
-		autoSides = pTag.getInt("autoSides");
-		matchNBT = pTag.contains("matchNBT") ? pTag.getInt("matchNBT") : 0xff;
-		creativeMode = pTag.getBoolean("Creative");
-		if (pTag.contains("CustomName", 8)) {
-			this.name = Component.Serializer.fromJson(pTag.getString("CustomName"), provider);
-		}
+		inputs.fromTag(pTag.getListOrEmpty("Inputs"), provider);
+		outputs.fromTag(pTag.getListOrEmpty("Outputs"), provider);
+		config.fromTag(pTag.getListOrEmpty("Config"), provider);
+		inputSides = pTag.getIntOr("inputSides", 0);
+		outputSides = pTag.getIntOr("outputSides", 0);
+		autoSides = pTag.getIntOr("autoSides", 0);
+		matchNBT = pTag.getIntOr("matchNBT", 0xff);
+		creativeMode = pTag.getBooleanOr("Creative", false);
+		this.name = parseCustomNameSafe(pTag.get("CustomName"), provider);
 	}
 
 	@Override
@@ -366,5 +364,11 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 		this.creativeMode = b;
 		hasInputs = null;
 		setChanged();
+	}
+
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		Containers.dropContents(level, pos, getInputs());
+		Containers.dropContents(level, pos, getOutputs());
 	}
 }

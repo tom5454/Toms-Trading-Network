@@ -188,38 +188,26 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 	@Override
 	public void receive(CompoundTag tag) {
 		if(pinv.player.isSpectator())return;
-		if(tag.contains("setItemCount")) {
-			CompoundTag t = tag.getCompound("setItemCount");
-			int slotId = t.getInt("id");
-			byte count = t.getByte("count");
+		tag.getCompound("setItemCount").ifPresent(t -> {
+			int slotId = t.getIntOr("id", 0);
+			byte count = t.getByteOr("count", (byte) 0);
 			Slot slot = slotId > -1 && slotId < slots.size() ? slots.get(slotId) : null;
 			if (slot instanceof PhantomSlot) {
 				ItemStack s = slot.getItem().copy();
 				s.setCount(Mth.clamp(count, 1, s.getMaxStackSize()));
 				slot.set(s);
 			}
-		}
-		if(tag.contains("setName")) {
-			machine.setCustomName(Component.literal(tag.getString("setName")));
-		}
-		if(tag.contains("setPhantom")) {
-			CompoundTag t = tag.getCompound("setPhantom");
-			int slotId = t.getInt("id");
-			ItemStack item = ItemStack.parseOptional(pinv.player.registryAccess(), t.getCompound("item"));
-			Slot slot = slotId > -1 && slotId < slots.size() ? slots.get(slotId) : null;
-			if (slot instanceof PhantomSlot) {
-				if(!item.isEmpty()) {
-					item.setCount(1);
-					slot.set(item);
-				}
-			}
-		}
+		});
+		tag.getString("setName").ifPresent(s -> {
+			machine.setCustomName(Component.literal(s));
+		});
 		if(tag.contains("setSide")) {
-			int side = tag.getByte("setSide");
-			int mode = tag.getByte("mode");
-			boolean auto = tag.getBoolean("auto");
+			int side = tag.getByteOr("setSide", (byte) 0);
+			int mode = tag.getByteOr("mode", (byte) 0);
+			boolean auto = tag.getBooleanOr("auto", false);
 			machine.setSides(side, mode, auto);
 		}
+		super.receive(tag);
 	}
 
 	public void setConfigCount(Slot slot, int count) {

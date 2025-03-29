@@ -23,10 +23,10 @@ public class BasicContainer extends SimpleContainer {
 		}
 
 		for(int k = 0; k < pContainerNbt.size(); ++k) {
-			CompoundTag compoundtag = pContainerNbt.getCompound(k);
-			int j = compoundtag.getByte("Slot") & 255;
+			CompoundTag compoundtag = pContainerNbt.getCompoundOrEmpty(k);
+			int j = compoundtag.getByteOr("Slot", (byte) 0) & 255;
 			if (j >= 0 && j < this.getContainerSize()) {
-				this.setItem(j, ItemStack.parseOptional(prov, compoundtag.getCompound("item")));
+				this.setItem(j, ItemStack.parse(prov, compoundtag.getCompoundOrEmpty("item")).orElse(ItemStack.EMPTY));
 			}
 		}
 

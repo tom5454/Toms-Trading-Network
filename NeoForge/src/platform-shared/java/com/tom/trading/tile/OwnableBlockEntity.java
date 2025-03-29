@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,14 +29,14 @@ public class OwnableBlockEntity extends BlockEntity {
 	protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
 		super.saveAdditional(pTag, provider);
 		if(ownerNameCache != null)pTag.putString("ownerNameCache", ownerNameCache);
-		if(owner != null)pTag.putUUID("owner", owner);
+		if(owner != null)pTag.store("owner", UUIDUtil.CODEC, owner);
 	}
 
 	@Override
 	public void loadAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
 		super.loadAdditional(pTag, provider);
-		ownerNameCache = pTag.contains("ownerNameCache", Tag.TAG_STRING) ? pTag.getString("ownerNameCache") : null;
-		owner = pTag.hasUUID("owner") ? pTag.getUUID("owner") : null;
+		ownerNameCache = pTag.getStringOr("ownerNameCache", null);
+		owner = pTag.read("owner", UUIDUtil.CODEC).orElse(null);
 	}
 
 	public boolean canAccess(Player p) {

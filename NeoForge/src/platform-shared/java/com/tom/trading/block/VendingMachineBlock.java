@@ -2,6 +2,7 @@ package com.tom.trading.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -90,17 +91,9 @@ public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActiva
 	}
 
 	@Override
-	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-		if (!pState.is(pNewState.getBlock())) {
-			BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-			if (blockentity instanceof VendingMachineBlockEntity te) {
-				Containers.dropContents(pLevel, pPos, te.getInputs());
-				Containers.dropContents(pLevel, pPos, te.getOutputs());
-				pLevel.updateNeighbourForOutputSignal(pPos, this);
-			}
-
-			super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-		}
+	protected void affectNeighborsAfterRemoval(BlockState p_394424_, ServerLevel p_394241_, BlockPos p_393520_,
+			boolean p_394545_) {
+		Containers.updateNeighboursAfterDestroy(p_394424_, p_394241_, p_393520_);
 	}
 
 	@Override
