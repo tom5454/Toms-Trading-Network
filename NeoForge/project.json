@@ -1,13 +1,12 @@
 {
   "type": "neoforge",
-  "name": "toms_trading_network-1.21.3",
+  "name": "toms_trading_network-1.21.4",
   "mcVer": "1.21",
   "verId": "1.21.3",
-  "display": "[NeoForge] Tom's Trading Network 1.21.3",
+  "display": "[NeoForge] Tom's Trading Network 1.21.4",
   "onGit": true,
   "subver": [
-	"1.21.2",
-    "1.21.3"
+	"1.21.4"
   ],
   "j21": true,
   "depProjects": [
