@@ -6,21 +6,11 @@
     "ici"
   ],
   "key": {
-  	"i": {
-      "tag": "c:ingots/iron"
-    },
-    "e": {
-      "tag": "c:gems/emerald"
-    },
-    "c": {
-      "tag": "c:chests"
-    },
-    "C": {
-      "item": "minecraft:comparator"
-    },
-    "p": {
-      "item": "minecraft:paper"
-    }
+    "i": "#c:ingots/iron",
+    "e": "#c:gems/emerald",
+    "c": "#c:chests",
+    "C": "minecraft:comparator",
+    "p": "minecraft:paper"
   },
   "result": {
     "id": "toms_trading_network:vending_machine"
