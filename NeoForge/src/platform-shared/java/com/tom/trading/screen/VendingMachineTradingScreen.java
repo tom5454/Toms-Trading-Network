@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +25,7 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 
 	@Override
 	protected void renderBg(GuiGraphics gr, float pPartialTick, int pMouseX, int pMouseY) {
-		gr.blit(RenderType::guiTextured, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+		gr.blit(RenderPipelines.GUI_TEXTURED, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 		textF.setMaxLength(100);
 		textF.setBordered(false);
 		textF.setVisible(true);
-		textF.setTextColor(16777215);
+		textF.setTextColor(0xFFFFFFFF);
 		textF.setValue("1");
 		addRenderableWidget(textF);
 

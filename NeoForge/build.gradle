@@ -28,7 +28,7 @@ repositories {
 }
 
 base {
-    archivesName = 'toms_trading_network-1.21.5'
+    archivesName = 'toms_trading_network-1.21.6'
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -132,7 +132,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    implementation "curse.maven:jade-324717:6353729"
+    implementation "curse.maven:jade-324717:6669809"
     
     if(useLib) {
     	compileOnly "mezz.jei:jei-1.21-neoforge-api:19.5.0.31"

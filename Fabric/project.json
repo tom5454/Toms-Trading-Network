@@ -1,12 +1,12 @@
 {
   "type": "fabric",
-  "name": "toms_trading_network-fabric-1.21.5",
+  "name": "toms_trading_network-fabric-1.21.6",
   "mcVer": "1.21",
-  "verId": "1.21.5",
-  "display": "[Fabric] Tom's Trading Network 1.21.5",
+  "verId": "1.21.6",
+  "display": "[Fabric] Tom's Trading Network 1.21.6",
   "onGit": true,
   "subver": [
-	"1.21.5"
+	"1.21.6"
   ],
   "j21": true,
   "appendMCVersion": false,

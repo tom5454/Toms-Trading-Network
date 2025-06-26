@@ -1,7 +1,7 @@
 package com.tom.trading.util;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
 
 public interface IDataReceiver {
-	void receive(CompoundTag tag);
+	void receive(ValueInput tag);
 }

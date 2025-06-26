@@ -12,6 +12,8 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.TagValueInput;
 
 import com.tom.trading.network.DataPacket;
 import com.tom.trading.screen.VendingMachineConfigScreen;
@@ -24,7 +26,7 @@ public class TradingNetworkModClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientPlayNetworking.registerGlobalReceiver(DataPacket.ID, (p, c) -> {
 			if(Minecraft.getInstance().screen instanceof IDataReceiver d) {
-				d.receive(p.tag());
+				d.receive(TagValueInput.create(ProblemReporter.DISCARDING, c.player().registryAccess(), p.tag()));
 			}
 		});
 

@@ -11,8 +11,10 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueInput;
 
 import com.tom.trading.block.AlwaysActivatableBlock;
 import com.tom.trading.network.DataPacket;
@@ -38,7 +40,7 @@ public class TradingNetworkMod implements ModInitializer {
 		PayloadTypeRegistry.playC2S().register(DataPacket.ID, DataPacket.STREAM_CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(DataPacket.ID, (p, c) -> {
 			if(c.player().containerMenu instanceof IDataReceiver d) {
-				d.receive(p.tag());
+				d.receive(TagValueInput.create(ProblemReporter.DISCARDING, c.player().registryAccess(), p.tag()));
 			}
 		});
 

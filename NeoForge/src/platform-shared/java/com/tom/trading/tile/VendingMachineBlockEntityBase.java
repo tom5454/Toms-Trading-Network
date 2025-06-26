@@ -5,13 +5,13 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.Containers;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,6 +24,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import com.tom.trading.Content;
 import com.tom.trading.block.VendingMachineBlock;
@@ -54,33 +56,31 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 	}
 
 	@Override
-	public void loadAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
-		super.loadAdditional(pTag, provider);
-		inputs.fromTag(pTag.getListOrEmpty("Inputs"), provider);
-		outputs.fromTag(pTag.getListOrEmpty("Outputs"), provider);
-		config.fromTag(pTag.getListOrEmpty("Config"), provider);
+	public void loadAdditional(ValueInput pTag) {
+		super.loadAdditional(pTag);
+		inputs.loadItems(pTag.listOrEmpty("Inputs", ItemStackWithSlot.CODEC));
+		outputs.loadItems(pTag.listOrEmpty("Outputs", ItemStackWithSlot.CODEC));
+		config.loadItems(pTag.listOrEmpty("Config", ItemStackWithSlot.CODEC));
 		inputSides = pTag.getIntOr("inputSides", 0);
 		outputSides = pTag.getIntOr("outputSides", 0);
 		autoSides = pTag.getIntOr("autoSides", 0);
 		matchNBT = pTag.getIntOr("matchNBT", 0xff);
 		creativeMode = pTag.getBooleanOr("Creative", false);
-		this.name = parseCustomNameSafe(pTag.get("CustomName"), provider);
+		this.name = parseCustomNameSafe(pTag, "CustomName");
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
-		super.saveAdditional(pTag, provider);
-		pTag.put("Inputs", inputs.createTag(provider));
-		pTag.put("Outputs", outputs.createTag(provider));
-		pTag.put("Config", config.createTag(provider));
+	protected void saveAdditional(ValueOutput pTag) {
+		super.saveAdditional(pTag);
+		inputs.storeItems(pTag.list("Inputs", ItemStackWithSlot.CODEC));
+		outputs.storeItems(pTag.list("Outputs", ItemStackWithSlot.CODEC));
+		config.storeItems(pTag.list("Config", ItemStackWithSlot.CODEC));
 		pTag.putInt("inputSides", inputSides);
 		pTag.putInt("outputSides", outputSides);
 		pTag.putInt("autoSides", autoSides);
 		pTag.putInt("matchNBT", matchNBT);
 		pTag.putBoolean("Creative", creativeMode);
-		if (this.name != null) {
-			pTag.putString("CustomName", Component.Serializer.toJson(this.name, provider));
-		}
+		pTag.storeNullable("CustomName", ComponentSerialization.CODEC, this.name);
 	}
 
 	public BasicContainer getInputs() {

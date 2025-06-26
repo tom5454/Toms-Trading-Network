@@ -3,6 +3,7 @@ package com.tom.trading.menu;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -12,6 +13,12 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import com.tom.trading.Content;
 import com.tom.trading.menu.slot.PhantomSlot;
@@ -186,9 +193,9 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 	}
 
 	@Override
-	public void receive(CompoundTag tag) {
+	public void receive(ValueInput tag) {
 		if(pinv.player.isSpectator())return;
-		tag.getCompound("setItemCount").ifPresent(t -> {
+		tag.child("setItemCount").ifPresent(t -> {
 			int slotId = t.getIntOr("id", 0);
 			byte count = t.getByteOr("count", (byte) 0);
 			Slot slot = slotId > -1 && slotId < slots.size() ? slots.get(slotId) : null;
@@ -201,12 +208,9 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 		tag.getString("setName").ifPresent(s -> {
 			machine.setCustomName(Component.literal(s));
 		});
-		if(tag.contains("setSide")) {
-			int side = tag.getByteOr("setSide", (byte) 0);
-			int mode = tag.getByteOr("mode", (byte) 0);
-			boolean auto = tag.getBooleanOr("auto", false);
-			machine.setSides(side, mode, auto);
-		}
+		tag.read("setSide", SidesObject.CODEC).ifPresent(e -> {
+			machine.setSides(e.dir().ordinal(), e.newState().ordinal(), e.auto());
+		});
 		super.receive(tag);
 	}
 
@@ -226,14 +230,26 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 	}
 
 	public void setSides(BlockFaceDirection dir, IOMode newState, boolean auto) {
-		CompoundTag tag = new CompoundTag();
-		tag.putByte("setSide", (byte) dir.ordinal());
-		tag.putByte("mode", (byte) newState.ordinal());
-		tag.putBoolean("auto", auto);
-		NetworkHandler.sendDataToServer(tag);
+		TagValueOutput tag = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
+		tag.store("setSide", SidesObject.CODEC, new SidesObject(dir, newState, auto));
+		NetworkHandler.sendDataToServer(tag.buildResult());
 	}
 
 	private void updateGui() {
 		if(updateGui != null)updateGui.run();
+	}
+
+	public static record SidesObject(BlockFaceDirection dir, IOMode newState, boolean auto) {
+
+		public static final MapCodec<SidesObject> MAP_CODEC = RecordCodecBuilder.mapCodec(
+				b -> b.group(
+						BlockFaceDirection.CODEC.fieldOf("dir").forGetter(SidesObject::dir),
+						IOMode.CODEC.fieldOf("mode").forGetter(SidesObject::newState),
+						Codec.BOOL.fieldOf("auto").forGetter(SidesObject::auto)
+						)
+				.apply(b, SidesObject::new)
+				);
+
+		public static final Codec<SidesObject> CODEC = MAP_CODEC.codec();
 	}
 }

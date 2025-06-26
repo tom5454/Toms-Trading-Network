@@ -9,7 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.CommonComponents;
@@ -49,16 +49,16 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 
 	@Override
 	protected void renderBg(GuiGraphics gr, float pPartialTick, int pMouseX, int pMouseY) {
-		gr.blit(RenderType::guiTextured, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+		gr.blit(RenderPipelines.GUI_TEXTURED, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
 		for (int i = 0;i<8;i++) {
 			Slot s = menu.getSlot(i);
 			if(!s.getItem().isEmpty() && ((menu.matchNBT & (1 << i)) == 0 || s.getItem().getItem() == Content.TAG_FILTER.get())) {
-				gr.blitSprite(RenderType::guiTextured, tagBg, this.leftPos + s.x - 1, this.topPos + s.y - 1, 18, 18);
+				gr.blitSprite(RenderPipelines.GUI_TEXTURED, tagBg, this.leftPos + s.x - 1, this.topPos + s.y - 1, 18, 18);
 			}
 		}
 
-		gr.blitSprite(RenderType::guiTextured, minecraft.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
+		gr.blitSprite(RenderPipelines.GUI_TEXTURED, minecraft.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
 	}
 
 	@Override
@@ -124,12 +124,12 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 
 	@Override
 	protected void renderLabels(GuiGraphics gr, int pMouseX, int pMouseY) {
-		gr.drawString(font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+		gr.drawString(font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF404040, false);
 
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.cost"), this.inventoryLabelX, 26, 4210752, false);
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.result"), 76, 26, 4210752, false);
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.input"), this.inventoryLabelX, 72, 4210752, false);
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.output"), 98, 72, 4210752, false);
+		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.cost"), this.inventoryLabelX, 26, 0xFF404040, false);
+		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.result"), 76, 26, 0xFF404040, false);
+		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.input"), this.inventoryLabelX, 72, 0xFF404040, false);
+		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.output"), 98, 72, 0xFF404040, false);
 	}
 
 	@Override

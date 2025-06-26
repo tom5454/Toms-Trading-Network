@@ -1,10 +1,10 @@
 package com.tom.trading.util;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class BasicContainer extends SimpleContainer {
 
@@ -16,36 +16,24 @@ public class BasicContainer extends SimpleContainer {
 		super(pItems);
 	}
 
-	@Override
-	public void fromTag(ListTag pContainerNbt, HolderLookup.Provider prov) {
+	public void loadItems(ValueInput.TypedInputList<ItemStackWithSlot> pContainerNbt) {
 		for(int i = 0; i < this.getContainerSize(); ++i) {
 			this.setItem(i, ItemStack.EMPTY);
 		}
 
-		for(int k = 0; k < pContainerNbt.size(); ++k) {
-			CompoundTag compoundtag = pContainerNbt.getCompoundOrEmpty(k);
-			int j = compoundtag.getByteOr("Slot", (byte) 0) & 255;
-			if (j >= 0 && j < this.getContainerSize()) {
-				this.setItem(j, ItemStack.parse(prov, compoundtag.getCompoundOrEmpty("item")).orElse(ItemStack.EMPTY));
+		for (final ItemStackWithSlot itemStackWithSlot : pContainerNbt) {
+			if (itemStackWithSlot.isValidInContainer(getContainerSize())) {
+				this.setItem(itemStackWithSlot.slot(), itemStackWithSlot.stack());
 			}
 		}
-
 	}
 
-	@Override
-	public ListTag createTag(HolderLookup.Provider prov) {
-		ListTag listtag = new ListTag();
-
-		for(int i = 0; i < this.getContainerSize(); ++i) {
+	public void storeItems(ValueOutput.TypedOutputList<ItemStackWithSlot> output) {
+		for (int i = 0; i < this.getContainerSize(); ++i) {
 			ItemStack itemstack = this.getItem(i);
 			if (!itemstack.isEmpty()) {
-				CompoundTag compoundtag = new CompoundTag();
-				compoundtag.putByte("Slot", (byte)i);
-				compoundtag.put("item", itemstack.save(prov));
-				listtag.add(compoundtag);
+				output.add(new ItemStackWithSlot(i, itemstack));
 			}
 		}
-
-		return listtag;
 	}
 }

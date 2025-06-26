@@ -96,7 +96,7 @@ sourceSets {
 			if(!useLib)exclude "com/tom/trading/jei/**"
 			if(!useLib)exclude "com/tom/trading/rei/**"
 			if(!useLib)exclude "com/tom/trading/emi/**"
-			if(!useLib)exclude "com/tom/trading/jade/**"
+			//if(!useLib)exclude "com/tom/trading/jade/**"
 		}
 		resources {
 			srcDir "../NeoForge/src/platform-shared/resources"
@@ -122,6 +122,8 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }*/
     
+    modImplementation ("curse.maven:jade-324717:6674245")
+    
 	if(useLib) {
 	    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
 	exclude(group: "net.fabricmc.fabric-api")
@@ -145,8 +147,6 @@ dependencies {
 	
 	modCompileOnly  "dev.emi:emi-fabric:1.1.10+1.21:api"
 	modLocalRuntime "dev.emi:emi-fabric:1.1.10+1.21"
-	    
-	modImplementation ("curse.maven:jade-324717:5493289")
 	}
 }
 

@@ -17,11 +17,11 @@ public class JadePlugin implements IWailaPlugin {
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
-		registration.registerBlockDataProvider(VendingMachineProvider.INSTANCE, VendingMachineBlockEntity.class);
+		registration.registerBlockDataProvider(VendingMachineDataProvider.INSTANCE, VendingMachineBlockEntity.class);
 	}
 
 	@Override
 	public void registerClient(IWailaClientRegistration registration) {
-		registration.registerBlockComponent(VendingMachineProvider.INSTANCE, VendingMachineBlock.class);
+		registration.registerBlockComponent(VendingMachineComponentProvider.INSTANCE, VendingMachineBlock.class);
 	}
 }

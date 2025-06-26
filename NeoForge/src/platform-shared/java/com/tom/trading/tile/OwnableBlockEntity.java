@@ -3,13 +3,13 @@ package com.tom.trading.tile;
 import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class OwnableBlockEntity extends BlockEntity {
 	private String ownerNameCache;
@@ -26,15 +26,15 @@ public class OwnableBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
-		super.saveAdditional(pTag, provider);
+	protected void saveAdditional(ValueOutput pTag) {
+		super.saveAdditional(pTag);
 		if(ownerNameCache != null)pTag.putString("ownerNameCache", ownerNameCache);
 		if(owner != null)pTag.store("owner", UUIDUtil.CODEC, owner);
 	}
 
 	@Override
-	public void loadAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
-		super.loadAdditional(pTag, provider);
+	public void loadAdditional(ValueInput pTag) {
+		super.loadAdditional(pTag);
 		ownerNameCache = pTag.getStringOr("ownerNameCache", null);
 		owner = pTag.read("owner", UUIDUtil.CODEC).orElse(null);
 	}

@@ -41,7 +41,7 @@ A simple mod to make trading with players easier
     # Does this dependency have to exist - if not, ordering below must be specified
     type="required"
     # The version range of the dependency
-    versionRange="[21.2.0-beta,)" #mandatory
+    versionRange="[21.6.0-beta,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -50,6 +50,6 @@ A simple mod to make trading with players easier
 [[dependencies.toms_trading_network]]
     modId="minecraft"
     type="required"
-    versionRange="[1.21.4,1.22)"
+    versionRange="[1.21.6,1.22)"
     ordering="NONE"
     side="BOTH"
