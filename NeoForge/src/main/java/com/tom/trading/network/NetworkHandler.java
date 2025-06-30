@@ -6,9 +6,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -19,7 +19,7 @@ public class NetworkHandler {
 	@SubscribeEvent
 	public static void onPayloadRegister(RegisterPayloadHandlersEvent event) {
 		PayloadRegistrar registrar = event.registrar("1");
-		registrar.playBidirectional(DataPacket.ID, DataPacket.STREAM_CODEC, new DirectionalPayloadHandler<>(NetworkHandler::handleDataClient, NetworkHandler::handleDataServer));
+		registrar.playBidirectional(DataPacket.ID, DataPacket.STREAM_CODEC, NetworkHandler::handleDataServer, NetworkHandler::handleDataClient);
 	}
 
 	public static void handleDataServer(DataPacket packet, IPayloadContext context) {
@@ -40,7 +40,7 @@ public class NetworkHandler {
 	}
 
 	public static void sendDataToServer(CompoundTag tag) {
-		PacketDistributor.sendToServer(new DataPacket(tag));
+		ClientPacketDistributor.sendToServer(new DataPacket(tag));
 	}
 
 	public static void sendTo(ServerPlayer pl, CompoundTag tag) {
