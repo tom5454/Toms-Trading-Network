@@ -26,7 +26,10 @@ repositories {
     maven { url = "https://api.modrinth.com/maven" }
     maven { url = "https://mvn.devos.one/releases/" }
     maven { url = "https://mvn.devos.one/snapshots/" }
-    maven { url = "https://maven.tterrag.com/" }
+    maven {
+		name "ModMaven"
+		url "https://modmaven.dev"
+	}
     maven { url = "https://jitpack.io/" }
     maven {
         url 'https://www.cursemaven.com'
@@ -94,7 +97,7 @@ sourceSets {
 		java {
 			srcDir "../NeoForge/src/platform-shared/java"
 			if(!useLib)exclude "com/tom/trading/jei/**"
-			if(!useLib)exclude "com/tom/trading/rei/**"
+			//if(!useLib)exclude "com/tom/trading/rei/**"
 			if(!useLib)exclude "com/tom/trading/emi/**"
 			//if(!useLib)exclude "com/tom/trading/jade/**"
 		}
@@ -124,9 +127,8 @@ dependencies {
     
     modImplementation ("curse.maven:jade-324717:6674245")
     
-	if(useLib) {
-	    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
-	exclude(group: "net.fabricmc.fabric-api")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
+		exclude(group: "net.fabricmc.fabric-api")
 	    exclude(group: "dev.architectury")
 	}
 	modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin:${project.rei_version}") {
@@ -137,16 +139,17 @@ dependencies {
 	    exclude(group: "net.fabricmc.fabric-api")
 	    exclude(group: "dev.architectury")
 	}
-	modImplementation("dev.architectury:architectury-fabric:13.0.4")
+	modImplementation("dev.architectury:architectury-fabric:17.0.8")
     
-    // compile against the JEI API but do not include it at runtime
-	modCompileOnlyApi("mezz.jei:jei-1.21-common-api:19.5.0.31")
-	modCompileOnlyApi("mezz.jei:jei-1.21-fabric-api:19.5.0.31")
-	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-1.21-fabric:19.5.0.31")
-	
-	modCompileOnly  "dev.emi:emi-fabric:1.1.10+1.21:api"
-	modLocalRuntime "dev.emi:emi-fabric:1.1.10+1.21"
+	if(useLib) {
+	    // compile against the JEI API but do not include it at runtime
+		modCompileOnlyApi("mezz.jei:jei-1.21-common-api:19.5.0.31")
+		modCompileOnlyApi("mezz.jei:jei-1.21-fabric-api:19.5.0.31")
+		// at runtime, use the full JEI jar for Fabric
+		modRuntimeOnly("mezz.jei:jei-1.21-fabric:19.5.0.31")
+		
+		modCompileOnly  "dev.emi:emi-fabric:1.1.10+1.21:api"
+		modLocalRuntime "dev.emi:emi-fabric:1.1.10+1.21"
 	}
 }
 
