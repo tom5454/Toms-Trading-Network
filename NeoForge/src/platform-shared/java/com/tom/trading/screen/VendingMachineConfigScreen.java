@@ -9,9 +9,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -58,7 +61,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 			}
 		}
 
-		gr.blitSprite(RenderPipelines.GUI_TEXTURED, minecraft.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
+		gr.blitSprite(RenderPipelines.GUI_TEXTURED, minecraft.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
 	}
 
 	@Override
@@ -132,15 +135,15 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	}
 
 	@Override
-	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-		if(popup.mouseClick(pMouseX, pMouseY, pButton))return true;
+	public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
+		if(popup.mouseClick(mouseButtonEvent))return true;
 		Slot clicked = getSlotUnderMouse();
-		if(pButton == 1 && clicked instanceof PhantomSlot && !clicked.getItem().isEmpty()) {
+		if(mouseButtonEvent.button() == 1 && clicked instanceof PhantomSlot && !clicked.getItem().isEmpty()) {
 			int popupSlot = clicked.getContainerSlot();
 			boolean tagFilter = clicked.getItem().getItem() == Content.TAG_FILTER.get();
 			var tags = clicked.getItem().getTags().toList();
 			nameBox.setFocused(false);
-			popup.open(pMouseX, pMouseY,
+			popup.open(mouseButtonEvent.x(), mouseButtonEvent.y(),
 					new TextFieldElement(
 							() -> Component.translatable("tooltip.toms_trading_network.item_count"),
 							s -> {
@@ -175,27 +178,27 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 					);
 			return true;
 		}
-		return super.mouseClicked(pMouseX, pMouseY, pButton);
+		return super.mouseClicked(mouseButtonEvent, bl);
 	}
 
 	@Override
-	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-		if(popup.keyPressed(pKeyCode, pScanCode, pModifiers))return true;
-		if (pKeyCode == 256) {
+	public boolean keyPressed(KeyEvent keyEvent) {
+		if(popup.keyPressed(keyEvent))return true;
+		if (keyEvent.key() == 256) {
 			if(nameBox.isFocused())nameBox.setFocused(false);
 			else this.minecraft.player.closeContainer();
 			return true;
-		} else if(pKeyCode == GLFW.GLFW_KEY_TAB) {
-			return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+		} else if(keyEvent.key() == GLFW.GLFW_KEY_TAB) {
+			return super.keyPressed(keyEvent);
 		}
 
-		return !this.nameBox.keyPressed(pKeyCode, pScanCode, pModifiers) && !this.nameBox.canConsumeInput() ? super.keyPressed(pKeyCode, pScanCode, pModifiers) : true;
+		return !this.nameBox.keyPressed(keyEvent) && !this.nameBox.canConsumeInput() ? super.keyPressed(keyEvent) : true;
 	}
 
 	@Override
-	public boolean charTyped(char pCodePoint, int pModifiers) {
-		if(popup.charTyped(pCodePoint, pModifiers))return true;
-		return super.charTyped(pCodePoint, pModifiers);
+	public boolean charTyped(CharacterEvent characterEvent) {
+		if(popup.charTyped(characterEvent))return true;
+		return super.charTyped(characterEvent);
 	}
 
 	private void updateGui() {

@@ -58,7 +58,7 @@ public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActiva
 	@Override
 	public boolean onActivate(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
 			InteractionHand pHand, BlockHitResult pHit) {
-		if(pLevel.isClientSide)return true;
+		if(pLevel.isClientSide())return true;
 		BlockEntity te = pLevel.getBlockEntity(pPos);
 		if(te instanceof MenuProvider e) {
 			pPlayer.openMenu(e);
@@ -103,7 +103,7 @@ public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActiva
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		if (level.isClientSide)return null;
+		if (level.isClientSide())return null;
 		return VendingMachineBlockEntityBase::tick;
 	}
 }

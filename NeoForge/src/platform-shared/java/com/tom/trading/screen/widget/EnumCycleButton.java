@@ -5,7 +5,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -42,10 +41,10 @@ public class EnumCycleButton<T extends Enum<T>> extends IconButton {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T extends Enum<T>> OnPress onPress(T[] el, BiConsumer<EnumCycleButton<T>, T> stateUpdate) {
-		return b -> {
+	private static <T extends Enum<T>> ButtonPressHandler onPress(T[] el, BiConsumer<EnumCycleButton<T>, T> stateUpdate) {
+		return (b, ev) -> {
 			EnumCycleButton<T> v = (EnumCycleButton<T>) b;
-			stateUpdate.accept(v, el[(v.getState().ordinal() + el.length + (Screen.hasAltDown() ? -1 : 1)) % el.length]);
+			stateUpdate.accept(v, el[(v.getState().ordinal() + el.length + (ev.hasShiftDown() ? -1 : 1)) % el.length]);
 		};
 	}
 }

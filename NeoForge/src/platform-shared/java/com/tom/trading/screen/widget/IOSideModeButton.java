@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,12 +30,12 @@ public class IOSideModeButton extends EnumCycleButton<IOMode> {
 	}
 
 	@Override
-	public void onPress() {
-		if (Screen.hasShiftDown()) {
+	public void onPress(InputWithModifiers input) {
+		if (input.hasShiftDown()) {
 			autoMode = !autoMode;
 			send();
 		} else
-			super.onPress();
+			super.onPress(input);
 	}
 
 	private void send() {
