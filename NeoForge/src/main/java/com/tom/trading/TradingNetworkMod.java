@@ -41,7 +41,7 @@ public class TradingNetworkMod {
 		bus.addListener(this::enqueueIMC);
 		// Register the processIMC method for modloading
 		//FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-		if (FMLEnvironment.dist == Dist.CLIENT)TradingNetworkModClient.preInit(bus);
+		if (FMLEnvironment.getDist() == Dist.CLIENT)TradingNetworkModClient.preInit(bus);
 		// Register the doClientStuff method for modloading
 		bus.addListener(this::doClientStuff);
 		bus.addListener(this::registerCapabilities);
@@ -95,6 +95,6 @@ public class TradingNetworkMod {
 	}
 
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, Content.VENDING_MACHINE_TILE.get(), (be, side) -> ((VendingMachineBlockEntity) be).getInventory(side));
+		event.registerBlockEntity(Capabilities.Item.BLOCK, Content.VENDING_MACHINE_TILE.get(), (be, side) -> ((VendingMachineBlockEntity) be).getInventory(side));
 	}
 }
