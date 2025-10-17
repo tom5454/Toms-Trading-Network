@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.168'
+    id 'net.neoforged.gradle.userdev' version '7.0.192'
 }
 
 version = mod_version
@@ -28,7 +28,7 @@ repositories {
 }
 
 base {
-    archivesName = 'toms_trading_network-1.21.8'
+    archivesName = 'toms_trading_network-1.21.10'
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -90,7 +90,7 @@ sourceSets {
 	main {
 		java {
 			srcDir "src/platform-shared/java"
-			if(!useLib)exclude "com/tom/trading/jei/**"
+			//if(!useLib)exclude "com/tom/trading/jei/**"
 			if(!useLib)exclude "com/tom/trading/rei/**"
 			if(!useLib)exclude "com/tom/trading/emi/**"
 			//if(!useLib)exclude "com/tom/trading/jade/**"
@@ -132,14 +132,14 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    implementation "curse.maven:jade-324717:6669809"
+    implementation "curse.maven:jade-324717:7056468"
+    
+    compileOnly "mezz.jei:jei-1.21.10-neoforge-api:26.0.0.1"
+    compileOnly "mezz.jei:jei-1.21.10-common-api:26.0.0.1"
+    // at runtime, use the full JEI jar
+    runtimeOnly "mezz.jei:jei-1.21.10-neoforge:26.0.0.1"
     
     if(useLib) {
-    	compileOnly "mezz.jei:jei-1.21-neoforge-api:19.5.0.31"
-    	compileOnly "mezz.jei:jei-1.21-common-api:19.5.0.31"
-    	// at runtime, use the full JEI jar
-  		runtimeOnly "mezz.jei:jei-1.21-neoforge:19.5.0.31"
-  	
   		compileOnly "dev.emi:emi-neoforge:1.1.10+1.21:api"
 		runtimeOnly "dev.emi:emi-neoforge:1.1.10+1.21"
 		
