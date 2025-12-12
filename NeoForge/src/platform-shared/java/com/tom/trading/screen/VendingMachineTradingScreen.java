@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
@@ -16,7 +16,7 @@ import com.tom.trading.gui.PlatformContainerScreen;
 import com.tom.trading.menu.VendingMachineTradingMenu;
 
 public class VendingMachineTradingScreen extends PlatformContainerScreen<VendingMachineTradingMenu> {
-	private static final ResourceLocation gui = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "textures/gui/vending_machine_trading.png");
+	private static final Identifier gui = Identifier.tryBuild(TradingNetworkMod.MODID, "textures/gui/vending_machine_trading.png");
 	private EditBox textF;
 
 	public VendingMachineTradingScreen(VendingMachineTradingMenu pMenu, Inventory pPlayerInventory, Component pTitle) {

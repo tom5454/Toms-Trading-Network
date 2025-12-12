@@ -6,16 +6,16 @@ import java.util.stream.Stream;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import com.tom.trading.TradingNetworkMod;
 import com.tom.trading.util.BlockFaceDirection;
 import com.tom.trading.util.ComponentJoiner;
 
 public class IOSideModeButton extends EnumCycleButton<IOMode> {
-	private static final ResourceLocation AUTO_INPUT = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/side_input_auto");
-	private static final ResourceLocation AUTO_OUTPUT = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/side_output_auto");
-	private static final ResourceLocation AUTO_IO = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/side_io_auto");
+	private static final Identifier AUTO_INPUT = Identifier.tryBuild(TradingNetworkMod.MODID, "icons/side_input_auto");
+	private static final Identifier AUTO_OUTPUT = Identifier.tryBuild(TradingNetworkMod.MODID, "icons/side_output_auto");
+	private static final Identifier AUTO_IO = Identifier.tryBuild(TradingNetworkMod.MODID, "icons/side_io_auto");
 	private boolean autoMode;
 	private Listener sendUpdate;
 	private BlockFaceDirection side;
@@ -43,7 +43,7 @@ public class IOSideModeButton extends EnumCycleButton<IOMode> {
 	}
 
 	@Override
-	public ResourceLocation getIcon() {
+	public Identifier getIcon() {
 		if (autoMode) {
 			switch (getState()) {
 			case INPUT:

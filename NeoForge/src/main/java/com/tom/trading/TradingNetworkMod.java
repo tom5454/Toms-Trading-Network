@@ -3,6 +3,7 @@ package com.tom.trading;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
@@ -77,7 +78,7 @@ public class TradingNetworkMod {
 	public void onBreak(BreakEvent event) {
 		BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
 		if (be instanceof OwnableBlockEntity o) {
-			if (!o.canAccess(event.getPlayer()) && !event.getPlayer().hasPermissions(2))
+			if (!o.canAccess(event.getPlayer()) && !event.getPlayer().permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
 				event.setCanceled(true);
 		}
 	}

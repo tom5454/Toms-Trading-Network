@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
@@ -61,7 +61,7 @@ public class Platform {
 		return new MenuType<>(create, FeatureFlags.VANILLA_SET);
 	}
 
-	public static TagKey<Item> getItemTag(ResourceLocation name) {
+	public static TagKey<Item> getItemTag(Identifier name) {
 		return ItemTags.create(name);
 	}
 }

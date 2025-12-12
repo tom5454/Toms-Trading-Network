@@ -1,6 +1,6 @@
 package com.tom.trading.jei;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import com.tom.trading.TradingNetworkMod;
 import com.tom.trading.screen.AbstractFilteredScreen;
@@ -13,8 +13,8 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 public class JEIHandler implements IModPlugin {
 
 	@Override
-	public ResourceLocation getPluginUid() {
-		return ResourceLocation.tryBuild(TradingNetworkMod.MODID, "jei");
+	public Identifier getPluginUid() {
+		return Identifier.tryBuild(TradingNetworkMod.MODID, "jei");
 	}
 
 	@Override

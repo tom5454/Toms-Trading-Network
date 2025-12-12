@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -42,7 +42,7 @@ public class GameObject<T> {
 		}
 
 		public <I extends T> GameObject<I> register(final String name, final Function<ResourceKey<T>, ? extends I> sup) {
-			ResourceKey<T> key = ResourceKey.create(handle.getRegistryKey(), ResourceLocation.tryBuild(TradingNetworkMod.MODID, name));
+			ResourceKey<T> key = ResourceKey.create(handle.getRegistryKey(), Identifier.tryBuild(TradingNetworkMod.MODID, name));
 			return new GameObject<>(handle.register(name, () -> sup.apply(key)));
 		}
 
@@ -51,7 +51,7 @@ public class GameObject<T> {
 		}
 	}
 
-	public ResourceLocation getId() {
+	public Identifier getId() {
 		return value.getId();
 	}
 

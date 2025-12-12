@@ -1,7 +1,7 @@
 package com.tom.trading.jade;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -15,7 +15,7 @@ public enum VendingMachineDataProvider implements IServerDataProvider<BlockAcces
 	INSTANCE;
 
 	@Override
-	public ResourceLocation getUid() {
+	public Identifier getUid() {
 		return JadePlugin.VENDING_MACHINE;
 	}
 

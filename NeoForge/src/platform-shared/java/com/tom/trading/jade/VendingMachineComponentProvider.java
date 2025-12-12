@@ -2,7 +2,7 @@ package com.tom.trading.jade;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.item.Item.TooltipContext;
@@ -24,7 +24,7 @@ public enum VendingMachineComponentProvider implements IBlockComponentProvider {
 	INSTANCE;
 
 	@Override
-	public ResourceLocation getUid() {
+	public Identifier getUid() {
 		return JadePlugin.VENDING_MACHINE;
 	}
 
@@ -46,7 +46,7 @@ public enum VendingMachineComponentProvider implements IBlockComponentProvider {
 						is.getTooltipLines(TooltipContext.of(accessor.getLevel()), accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
 					}
 				}
-				BoxStyle b = BoxStyle.transparent().clone();
+				BoxStyle b = BoxStyle.transparent().copy();
 				//b.borderColor = new int[] {0xFFFF0000, 0xFFFF0000, 0xFFFF0000, 0xFFFF0000};
 				b.borderWidth = 1;
 				tooltip.add(JadeUI.box(t, b));
@@ -61,7 +61,7 @@ public enum VendingMachineComponentProvider implements IBlockComponentProvider {
 						is.getTooltipLines(TooltipContext.of(accessor.getLevel()), accessor.getPlayer(), TooltipFlag.Default.NORMAL).forEach(t::add);
 					}
 				}
-				b = BoxStyle.transparent().clone();
+				b = BoxStyle.transparent().copy();
 				//b.borderColor = new int[] {0xFF00FF00, 0xFF00FF00, 0xFF00FF00, 0xFF00FF00};
 				b.borderWidth = 1;
 				tooltip.add(JadeUI.box(t, b));

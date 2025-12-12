@@ -17,7 +17,7 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -36,8 +36,8 @@ import com.tom.trading.util.PopupMenuManager.PopupElement;
 import com.tom.trading.util.PopupMenuManager.TextFieldElement;
 
 public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMachineConfigMenu> {
-	private static final ResourceLocation gui = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "textures/gui/vending_machine_config.png");
-	private static final ResourceLocation tagBg = ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/tag_filter_bg");
+	private static final Identifier gui = Identifier.tryBuild(TradingNetworkMod.MODID, "textures/gui/vending_machine_config.png");
+	private static final Identifier tagBg = Identifier.tryBuild(TradingNetworkMod.MODID, "icons/tag_filter_bg");
 	private EditBox nameBox;
 	private Component title;
 	private EnumMap<BlockFaceDirection, IOSideModeButton> sideCfgButtons = new EnumMap<>(BlockFaceDirection.class);
@@ -61,7 +61,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 			}
 		}
 
-		gr.blitSprite(RenderPipelines.GUI_TEXTURED, minecraft.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
+		gr.blitSprite(RenderPipelines.GUI_TEXTURED, minecraft.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(Identifier.tryBuild(TradingNetworkMod.MODID, "block/vending_machine_front")), this.leftPos + 134, this.topPos + 46, 16, 16);
 	}
 
 	@Override
@@ -90,8 +90,8 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 
 		creativeBtn = addRenderableWidget(ToggleButton.builder(this.leftPos + this.imageWidth - 18, this.topPos - 18).
 				name(Component.translatable("narrator.toms_trading_network.vending_machine.creative_mode")).
-				iconOff(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/creative_off")).
-				iconOn(ResourceLocation.tryBuild(TradingNetworkMod.MODID, "icons/creative_on")).
+				iconOff(Identifier.tryBuild(TradingNetworkMod.MODID, "icons/creative_off")).
+				iconOn(Identifier.tryBuild(TradingNetworkMod.MODID, "icons/creative_on")).
 				build(s -> {
 					sendButtonClick(0b0010_0000 | (s ? 1 : 0));
 				}));

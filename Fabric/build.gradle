@@ -1,15 +1,15 @@
 plugins {
-	id 'fabric-loom' version '1.11-SNAPSHOT'
+	id 'fabric-loom' version '1.14-SNAPSHOT'
 	id 'maven-publish'
 	
 }
 
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
-
-archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
 
 def useLib = System.getProperty("useLib")
 
@@ -96,10 +96,10 @@ sourceSets {
         }
 		java {
 			srcDir "../NeoForge/src/platform-shared/java"
-			if(!useLib)exclude "com/tom/trading/jei/**"
-			if(!useLib)exclude "com/tom/trading/rei/**"
-			if(!useLib)exclude "com/tom/trading/emi/**"
-			//if(!useLib)exclude "com/tom/trading/jade/**"
+			/*if(!useLib)*/exclude "com/tom/trading/jei/**"
+			/*if(!useLib)*/exclude "com/tom/trading/rei/**"
+			/*if(!useLib)*/exclude "com/tom/trading/emi/**"
+			//*if(!useLib)*/exclude "com/tom/trading/jade/**"
 		}
 		resources {
 			srcDir "../NeoForge/src/platform-shared/resources"
@@ -121,11 +121,11 @@ dependencies {
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	
-	modImplementation ("curse.maven:jade-324717:7056475")
-    
-	modImplementation("com.terraformersmc:modmenu:16.0.0-rc.1") {
+	modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+    
+    modImplementation ("curse.maven:jade-324717:7312559")
     
 	if(useLib) {
 	    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
@@ -169,6 +169,9 @@ java {
 	// if it is present.
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
