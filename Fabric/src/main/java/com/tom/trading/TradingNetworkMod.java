@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ProblemReporter;
@@ -24,6 +25,9 @@ import com.tom.trading.util.IDataReceiver;
 public class TradingNetworkMod implements ModInitializer {
 	public static final String MODID = "toms_trading_network";
 	private static final Logger LOGGER = LogManager.getLogger(MODID);
+
+	private static final String OPAC_MOD_ID = "openpartiesandclaims";
+	private static final ResourceLocation OPAC_PROTECTION_PHASE = ResourceLocation.tryBuild(OPAC_MOD_ID, "protection");
 
 	@Override
 	public void onInitialize() {
@@ -56,6 +60,8 @@ public class TradingNetworkMod implements ModInitializer {
 			return InteractionResult.PASS;
 		});
 		UseBlockCallback.EVENT.addPhaseOrdering(rl, Event.DEFAULT_PHASE);
+		if (FabricLoader.getInstance().isModLoaded(OPAC_MOD_ID))
+			UseBlockCallback.EVENT.addPhaseOrdering(rl, OPAC_PROTECTION_PHASE);
 
 		PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, be) -> {
 			if (be instanceof OwnableBlockEntity o) {
