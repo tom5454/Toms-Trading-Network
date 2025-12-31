@@ -28,7 +28,7 @@ public class TradingNetworkMod implements ModInitializer {
 	private static final Logger LOGGER = LogManager.getLogger(MODID);
 
 	private static final String OPAC_MOD_ID = "openpartiesandclaims";
-	private static final ResourceLocation OPAC_PROTECTION_PHASE = ResourceLocation.tryBuild(OPAC_MOD_ID, "protection");
+	private static final Identifier OPAC_PROTECTION_PHASE = Identifier.tryBuild(OPAC_MOD_ID, "protection");
 
 	@Override
 	public void onInitialize() {
