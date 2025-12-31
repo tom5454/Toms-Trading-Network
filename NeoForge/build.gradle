@@ -181,8 +181,6 @@ publishing {
     publications {
         register('mavenJava', MavenPublication) {
             from components.java
-            
-            artifactId "TomsTradingNetwork-121" // Old naming scheme
         }
     }
     repositories {
