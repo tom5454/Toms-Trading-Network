@@ -96,7 +96,7 @@ sourceSets {
         }
 		java {
 			srcDir "../NeoForge/src/platform-shared/java"
-			/*if(!useLib)*/exclude "com/tom/trading/jei/**"
+			if(!useLib)exclude "com/tom/trading/jei/**"
 			/*if(!useLib)*/exclude "com/tom/trading/rei/**"
 			/*if(!useLib)*/exclude "com/tom/trading/emi/**"
 			//*if(!useLib)*/exclude "com/tom/trading/jade/**"
@@ -142,10 +142,10 @@ dependencies {
 		}
 		modImplementation("dev.architectury:architectury-fabric:17.0.8")
 	    // compile against the JEI API but do not include it at runtime
-		modCompileOnlyApi("mezz.jei:jei-1.21-common-api:19.5.0.31")
-		modCompileOnlyApi("mezz.jei:jei-1.21-fabric-api:19.5.0.31")
+		modCompileOnlyApi("mezz.jei:jei-1.21.11-common-api:27.3.0.14")
+		modCompileOnlyApi("mezz.jei:jei-1.21.11-fabric-api:27.3.0.14")
 		// at runtime, use the full JEI jar for Fabric
-		modRuntimeOnly("mezz.jei:jei-1.21-fabric:19.5.0.31")
+		modRuntimeOnly("mezz.jei:jei-1.21.11-fabric:27.3.0.14")
 		
 		modCompileOnly  "dev.emi:emi-fabric:1.1.10+1.21:api"
 		modLocalRuntime "dev.emi:emi-fabric:1.1.10+1.21"
