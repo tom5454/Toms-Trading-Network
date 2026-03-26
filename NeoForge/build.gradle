@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.192'
+    id 'net.neoforged.gradle.userdev' version '7.1.21'
 }
 
 version = mod_version
@@ -31,8 +31,7 @@ base {
     archivesName = 'toms_trading_network-1.21.11'
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 def useLib = System.getProperty("useLib")
 
 //minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -90,10 +89,10 @@ sourceSets {
 	main {
 		java {
 			srcDir "src/platform-shared/java"
-			//*if(!useLib)*/exclude "com/tom/trading/jei/**"
+			/*if(!useLib)*/exclude "com/tom/trading/jei/**"
 			/*if(!useLib)*/exclude "com/tom/trading/rei/**"
 			/*if(!useLib)*/exclude "com/tom/trading/emi/**"
-			//*if(!useLib)*/exclude "com/tom/trading/jade/**"
+			/*if(!useLib)*/exclude "com/tom/trading/jade/**"
 			/*if(!useLib)*/exclude "com/tom/trading/top/**"
 		}
 		resources {
@@ -132,14 +131,14 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    implementation "curse.maven:jade-324717:7313008"
-    
-    compileOnly "mezz.jei:jei-1.21.11-neoforge-api:27.3.0.14"
-    compileOnly "mezz.jei:jei-1.21.11-common-api:27.3.0.14"
-    // at runtime, use the full JEI jar
-    runtimeOnly "mezz.jei:jei-1.21.11-neoforge:27.3.0.14"
-    
     if(useLib) {
+    	implementation "curse.maven:jade-324717:7313008"
+	    
+	    compileOnly "mezz.jei:jei-1.21.11-neoforge-api:27.3.0.14"
+	    compileOnly "mezz.jei:jei-1.21.11-common-api:27.3.0.14"
+	    // at runtime, use the full JEI jar
+	    runtimeOnly "mezz.jei:jei-1.21.11-neoforge:27.3.0.14"
+	    
   		compileOnly "dev.emi:emi-neoforge:1.1.10+1.21:api"
 		runtimeOnly "dev.emi:emi-neoforge:1.1.10+1.21"
 		

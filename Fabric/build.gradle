@@ -1,7 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.14-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 	id 'maven-publish'
-	
 }
 
 version = project.mod_version
@@ -70,22 +69,6 @@ repositories {
 	}
 }
 
-loom {
-    runs {
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagen"
-        datagen {
-            inherit server
-            name "Data Generation"
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
-            vmArg "-Dfabric-api.datagen.modid=toms_trading_network"
-            //vmArg "-Dporting_lib.datagen.existing_resources=${file("src/main/resources")};${file("../TomsTradingNetwork/src/platform-shared/resources")}"
- 
-            runDir "build/datagen"
-        }
-    }
-}
-
 // Add the generated resources to the main source set
 sourceSets {
     main {
@@ -96,10 +79,10 @@ sourceSets {
         }
 		java {
 			srcDir "../NeoForge/src/platform-shared/java"
-			if(!useLib)exclude "com/tom/trading/jei/**"
+			/*if(!useLib)*/exclude "com/tom/trading/jei/**"
 			/*if(!useLib)*/exclude "com/tom/trading/rei/**"
 			/*if(!useLib)*/exclude "com/tom/trading/emi/**"
-			//*if(!useLib)*/exclude "com/tom/trading/jade/**"
+			/*if(!useLib)*/exclude "com/tom/trading/jade/**"
 		}
 		resources {
 			srcDir "../NeoForge/src/platform-shared/resources"
@@ -110,45 +93,18 @@ sourceSets {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	compileOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+	localRuntime("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 	
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
-	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+	// implementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	
-	modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-    
-    modImplementation ("curse.maven:jade-324717:7312559")
-    
 	if(useLib) {
-	    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"){
-			exclude(group: "net.fabricmc.fabric-api")
-		    exclude(group: "dev.architectury")
-		}
-		modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin:${project.rei_version}") {
-		   exclude(group: "net.fabricmc.fabric-api")
-		   exclude(group: "dev.architectury")
-		}
-		modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"){
-		    exclude(group: "net.fabricmc.fabric-api")
-		    exclude(group: "dev.architectury")
-		}
-		modImplementation("dev.architectury:architectury-fabric:17.0.8")
-	    // compile against the JEI API but do not include it at runtime
-		modCompileOnlyApi("mezz.jei:jei-1.21.11-common-api:27.3.0.14")
-		modCompileOnlyApi("mezz.jei:jei-1.21.11-fabric-api:27.3.0.14")
-		// at runtime, use the full JEI jar for Fabric
-		modRuntimeOnly("mezz.jei:jei-1.21.11-fabric:27.3.0.14")
-		
-		modCompileOnly  "dev.emi:emi-fabric:1.1.10+1.21:api"
-		modLocalRuntime "dev.emi:emi-fabric:1.1.10+1.21"
 	}
 }
 
@@ -161,7 +117,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 }
 
 java {
@@ -170,8 +126,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {

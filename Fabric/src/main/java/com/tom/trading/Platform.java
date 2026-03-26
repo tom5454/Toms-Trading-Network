@@ -3,7 +3,7 @@ package com.tom.trading;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,8 +12,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -39,7 +39,7 @@ public class Platform {
 
 	private static final ResourceKey<CreativeModeTab> ITEM_GROUP = ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.tryBuild(TradingNetworkMod.MODID, "tab"));
 
-	public static final CreativeModeTab TRADING_MOD_TAB = FabricItemGroup.builder().title(Component.translatable("itemGroup.toms_trading_network.tab")).icon(() -> new ItemStack(Content.VENDING_MACHINE.get())).displayItems((p, out) -> {
+	public static final CreativeModeTab TRADING_MOD_TAB = FabricCreativeModeTab.builder().title(Component.translatable("itemGroup.toms_trading_network.tab")).icon(() -> new ItemStack(Content.VENDING_MACHINE.get())).displayItems((p, out) -> {
 		tabItems.forEach(out::accept);
 	}).build();
 

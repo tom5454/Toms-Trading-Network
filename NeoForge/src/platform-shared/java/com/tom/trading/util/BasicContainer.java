@@ -1,12 +1,17 @@
 package com.tom.trading.util;
 
+import java.util.List;
+
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
+import com.google.common.collect.Lists;
+
 public class BasicContainer extends SimpleContainer {
+	private List<ContainerListener> listeners;
 
 	public BasicContainer(int pSize) {
 		super(pSize);
@@ -14,6 +19,29 @@ public class BasicContainer extends SimpleContainer {
 
 	public BasicContainer(ItemStack... pItems) {
 		super(pItems);
+	}
+
+	public void addListener(ContainerListener p_19165_) {
+		if (this.listeners == null) {
+			this.listeners = Lists.newArrayList();
+		}
+
+		this.listeners.add(p_19165_);
+	}
+
+	public void removeListener(ContainerListener p_19182_) {
+		if (this.listeners != null) {
+			this.listeners.remove(p_19182_);
+		}
+	}
+
+	@Override
+	public void setChanged() {
+		if (this.listeners != null) {
+			for (ContainerListener containerlistener : this.listeners) {
+				containerlistener.containerChanged(this);
+			}
+		}
 	}
 
 	public void loadItems(ValueInput.TypedInputList<ItemStackWithSlot> pContainerNbt) {
@@ -35,5 +63,10 @@ public class BasicContainer extends SimpleContainer {
 				output.add(new ItemStackWithSlot(i, itemstack));
 			}
 		}
+	}
+
+	@FunctionalInterface
+	public interface ContainerListener {
+		void containerChanged(BasicContainer basicContainer);
 	}
 }

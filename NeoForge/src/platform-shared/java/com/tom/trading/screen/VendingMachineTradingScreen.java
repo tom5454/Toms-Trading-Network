@@ -1,7 +1,10 @@
 package com.tom.trading.screen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -9,9 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import com.tom.trading.TradingNetworkMod;
-import com.tom.trading.TradingNetworkModClient;
 import com.tom.trading.gui.PlatformContainerScreen;
 import com.tom.trading.menu.VendingMachineTradingMenu;
 
@@ -24,7 +27,9 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 	}
 
 	@Override
-	protected void renderBg(GuiGraphics gr, float pPartialTick, int pMouseX, int pMouseY) {
+	public void extractBackground(final GuiGraphicsExtractor gr, final int mouseX, final int mouseY,
+			final float a) {
+		super.extractBackground(gr, mouseX, mouseY, a);
 		gr.blit(RenderPipelines.GUI_TEXTURED, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
@@ -57,15 +62,14 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 	}
 
 	@Override
-	public void render(GuiGraphics gr, int pMouseX, int pMouseY, float pPartialTick) {
-		super.render(gr, pMouseX, pMouseY, pPartialTick);
+	protected List<Component> getTooltipFromContainerItem(ItemStack itemStack) {
+		List<Component> tooltip = new ArrayList<>(super.getTooltipFromContainerItem(itemStack));
 		Slot s = getSlotUnderMouse();
-		if(s != null && s.getContainerSlot() < 8) {
-			if((menu.matchNBT & (1 << s.getContainerSlot())) == 0) {
-				TradingNetworkModClient.setTooltip(Component.translatable("tooltip.toms_trading_network.ignoredNBT").withStyle(ChatFormatting.WHITE));
+		if (s != null && s.getContainerSlot() < 8) {
+			if ((menu.matchNBT & (1 << s.getContainerSlot())) == 0) {
+				tooltip.add(Component.translatable("tooltip.toms_trading_network.ignoredNBT").withStyle(ChatFormatting.WHITE));
 			}
 		}
-		this.renderTooltip(gr, pMouseX, pMouseY);
-		TradingNetworkModClient.setTooltip();
+		return tooltip;
 	}
 }

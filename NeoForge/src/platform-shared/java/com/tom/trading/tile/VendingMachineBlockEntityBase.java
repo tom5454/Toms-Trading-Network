@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
-import net.minecraft.world.ContainerListener;
 import net.minecraft.world.Containers;
 import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.MenuProvider;
@@ -32,6 +31,7 @@ import com.tom.trading.block.VendingMachineBlock;
 import com.tom.trading.menu.VendingMachineConfigMenu;
 import com.tom.trading.menu.VendingMachineTradingMenu;
 import com.tom.trading.util.BasicContainer;
+import com.tom.trading.util.BasicContainer.ContainerListener;
 import com.tom.trading.util.BlockFaceDirection;
 import com.tom.trading.util.TradeResult;
 
@@ -47,9 +47,9 @@ public abstract class VendingMachineBlockEntityBase extends OwnableBlockEntity i
 
 	public VendingMachineBlockEntityBase(BlockPos pPos, BlockState pBlockState) {
 		super(Content.VENDING_MACHINE_TILE.get(), pPos, pBlockState);
-		inputs.addListener(c -> hasInputs = null);
-		config.addListener(c -> hasInputs = null);
-		ContainerListener l = c -> setChanged();
+		inputs.addListener(_ -> hasInputs = null);
+		config.addListener(_ -> hasInputs = null);
+		ContainerListener l = _ -> setChanged();
 		config.addListener(l);
 		inputs.addListener(l);
 		outputs.addListener(l);

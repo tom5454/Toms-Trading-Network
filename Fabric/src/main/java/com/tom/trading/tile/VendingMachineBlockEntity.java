@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -22,8 +22,8 @@ import com.google.common.base.Predicates;
 
 public class VendingMachineBlockEntity extends VendingMachineBlockEntityBase implements SidedStorageBlockEntity {
 	private EnumMap<Direction, Handler> itemCaps = new EnumMap<>(Direction.class);
-	private Storage<ItemVariant> inputWr = FilteringStorage.insertOnlyOf(InventoryStorage.of(getInputs(), null));
-	private Storage<ItemVariant> outputWr = FilteringStorage.extractOnlyOf(InventoryStorage.of(getOutputs(), null));
+	private Storage<ItemVariant> inputWr = FilteringStorage.insertOnlyOf(ContainerStorage.of(getInputs(), null));
+	private Storage<ItemVariant> outputWr = FilteringStorage.extractOnlyOf(ContainerStorage.of(getOutputs(), null));
 
 	public VendingMachineBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(pPos, pBlockState);

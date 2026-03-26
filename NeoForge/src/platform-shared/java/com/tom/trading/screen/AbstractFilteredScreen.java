@@ -13,6 +13,10 @@ public abstract class AbstractFilteredScreen<T extends AbstractFilteredMenu> ext
 		super(p_97741_, p_97742_, p_97743_);
 	}
 
+	public AbstractFilteredScreen(T menu, Inventory inventory, Component title, int imageWidth, int imageHeight) {
+		super(menu, inventory, title, imageWidth, imageHeight);
+	}
+
 	public boolean isHovering(Slot slot, double d, double e) {
 		return this.isHovering(slot.x, slot.y, 16, 16, d, e);
 	}

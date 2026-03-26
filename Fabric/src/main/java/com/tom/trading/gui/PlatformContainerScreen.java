@@ -12,6 +12,10 @@ public abstract class PlatformContainerScreen<T extends AbstractContainerMenu> e
 		super(pMenu, pPlayerInventory, pTitle);
 	}
 
+	public PlatformContainerScreen(T menu, Inventory inventory, Component title, int imageWidth, int imageHeight) {
+		super(menu, inventory, title, imageWidth, imageHeight);
+	}
+
 	public Slot getSlotUnderMouse() {
 		return hoveredSlot;
 	}

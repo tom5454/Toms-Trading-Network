@@ -41,8 +41,8 @@ public class TradingNetworkMod implements ModInitializer {
 		Platform.BLOCK_ENTITY.runRegistration();
 		Platform.MENU_TYPE.runRegistration();
 
-		PayloadTypeRegistry.playS2C().register(DataPacket.ID, DataPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playC2S().register(DataPacket.ID, DataPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(DataPacket.ID, DataPacket.STREAM_CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(DataPacket.ID, DataPacket.STREAM_CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(DataPacket.ID, (p, c) -> {
 			if(c.player().containerMenu instanceof IDataReceiver d) {
 				d.receive(TagValueInput.create(ProblemReporter.DISCARDING, c.player().registryAccess(), p.tag()));

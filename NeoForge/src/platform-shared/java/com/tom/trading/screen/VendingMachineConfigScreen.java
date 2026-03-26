@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -45,13 +45,15 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	private ToggleButton creativeBtn;
 
 	public VendingMachineConfigScreen(VendingMachineConfigMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
-		super(pMenu, pPlayerInventory, pTitle);
+		super(pMenu, pPlayerInventory, pTitle, 176, 211);
 		this.title = pTitle;
 		pMenu.updateGui = this::updateGui;
 	}
 
 	@Override
-	protected void renderBg(GuiGraphics gr, float pPartialTick, int pMouseX, int pMouseY) {
+	public void extractBackground(final GuiGraphicsExtractor gr, final int mouseX, final int mouseY,
+			final float a) {
+		super.extractBackground(gr, mouseX, mouseY, a);
 		gr.blit(RenderPipelines.GUI_TEXTURED, gui, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
 		for (int i = 0;i<8;i++) {
@@ -66,8 +68,6 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 
 	@Override
 	protected void init() {
-		imageWidth = 176;
-		imageHeight = 211;
 		inventoryLabelY = imageHeight - 92;
 		sideCfgButtons.clear();
 		super.init();
@@ -117,21 +117,20 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	}
 
 	@Override
-	public void render(GuiGraphics gr, int pMouseX, int pMouseY, float pPartialTick) {
-		super.render(gr, pMouseX, pMouseY, pPartialTick);
-		if(popup.render(gr, font, pMouseX, pMouseY)) {
-			this.renderTooltip(gr, pMouseX, pMouseY);
+	protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+		if (popup.extract(graphics, font, mouseX, mouseY)) {
+			super.extractTooltip(graphics, mouseX, mouseY);
 		}
 	}
 
 	@Override
-	protected void renderLabels(GuiGraphics gr, int pMouseX, int pMouseY) {
-		gr.drawString(font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF404040, false);
+	protected void extractLabels(GuiGraphicsExtractor gr, int pMouseX, int pMouseY) {
+		gr.text(font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF404040, false);
 
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.cost"), this.inventoryLabelX, 26, 0xFF404040, false);
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.result"), 76, 26, 0xFF404040, false);
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.input"), this.inventoryLabelX, 72, 0xFF404040, false);
-		gr.drawString(font, Component.translatable("label.toms_trading_network.vending_machine.output"), 98, 72, 0xFF404040, false);
+		gr.text(font, Component.translatable("label.toms_trading_network.vending_machine.cost"), this.inventoryLabelX, 26, 0xFF404040, false);
+		gr.text(font, Component.translatable("label.toms_trading_network.vending_machine.result"), 76, 26, 0xFF404040, false);
+		gr.text(font, Component.translatable("label.toms_trading_network.vending_machine.input"), this.inventoryLabelX, 72, 0xFF404040, false);
+		gr.text(font, Component.translatable("label.toms_trading_network.vending_machine.output"), 98, 72, 0xFF404040, false);
 	}
 
 	@Override
@@ -141,7 +140,7 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 		if(mouseButtonEvent.button() == 1 && clicked instanceof PhantomSlot && !clicked.getItem().isEmpty()) {
 			int popupSlot = clicked.getContainerSlot();
 			boolean tagFilter = clicked.getItem().getItem() == Content.TAG_FILTER.get();
-			var tags = clicked.getItem().getTags().toList();
+			var tags = clicked.getItem().tags().toList();
 			nameBox.setFocused(false);
 			popup.open(mouseButtonEvent.x(), mouseButtonEvent.y(),
 					new TextFieldElement(

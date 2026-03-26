@@ -10,4 +10,8 @@ public abstract class PlatformContainerScreen<T extends AbstractContainerMenu> e
 	public PlatformContainerScreen(T pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 	}
+
+	public PlatformContainerScreen(T menu, Inventory inventory, Component title, int imageWidth, int imageHeight) {
+		super(menu, inventory, title, imageWidth, imageHeight);
+	}
 }

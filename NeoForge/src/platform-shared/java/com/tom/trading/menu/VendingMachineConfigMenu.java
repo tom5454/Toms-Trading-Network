@@ -10,7 +10,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -154,7 +154,7 @@ public class VendingMachineConfigMenu extends AbstractFilteredMenu implements ID
 	}
 
 	@Override
-	public void clicked(int slotId, int dragType, ClickType pClickType, Player pPlayer) {
+	public void clicked(int slotId, int dragType, ContainerInput pClickType, Player pPlayer) {
 		Slot slot = slotId > -1 && slotId < slots.size() ? slots.get(slotId) : null;
 		if (slot instanceof PhantomSlot) {
 			slot.set(getCarried().copy());
