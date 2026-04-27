@@ -21,7 +21,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.neoforged.neoforge.event.level.BlockEvent.BreakEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 
 import com.tom.trading.block.AlwaysActivatableBlock;
 import com.tom.trading.network.NetworkHandler;
@@ -75,7 +75,7 @@ public class TradingNetworkMod {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onBreak(BreakEvent event) {
+	public void onBreak(BreakBlockEvent event) {
 		BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
 		if (be instanceof OwnableBlockEntity o) {
 			if (!o.canAccess(event.getPlayer()) && !event.getPlayer().permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))

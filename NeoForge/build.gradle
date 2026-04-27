@@ -28,7 +28,7 @@ repositories {
 }
 
 base {
-    archivesName = 'toms_trading_network-1.21.11'
+    archivesName = 'toms_trading_network-26.1'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
