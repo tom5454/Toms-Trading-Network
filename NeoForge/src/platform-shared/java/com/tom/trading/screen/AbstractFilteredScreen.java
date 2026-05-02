@@ -2,7 +2,6 @@ package com.tom.trading.screen;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 
 import com.tom.trading.gui.PlatformContainerScreen;
 import com.tom.trading.menu.AbstractFilteredMenu;
@@ -15,9 +14,5 @@ public abstract class AbstractFilteredScreen<T extends AbstractFilteredMenu> ext
 
 	public AbstractFilteredScreen(T menu, Inventory inventory, Component title, int imageWidth, int imageHeight) {
 		super(menu, inventory, title, imageWidth, imageHeight);
-	}
-
-	public boolean isHovering(Slot slot, double d, double e) {
-		return this.isHovering(slot.x, slot.y, 16, 16, d, e);
 	}
 }
