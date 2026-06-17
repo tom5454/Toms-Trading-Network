@@ -23,7 +23,7 @@ public class TradingNetworkModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientPlayNetworking.registerGlobalReceiver(DataPacket.ID, (p, c) -> {
-			if(Minecraft.getInstance().screen instanceof IDataReceiver d) {
+			if(Minecraft.getInstance().gui.screen() instanceof IDataReceiver d) {
 				d.receive(TagValueInput.create(ProblemReporter.DISCARDING, c.player().registryAccess(), p.tag()));
 			}
 		});

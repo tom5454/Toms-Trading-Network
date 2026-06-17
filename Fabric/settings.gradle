@@ -8,4 +8,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "TomsTradingNetworkFabric-26.1"
+rootProject.name = "TomsTradingNetworkFabric-26.2"
