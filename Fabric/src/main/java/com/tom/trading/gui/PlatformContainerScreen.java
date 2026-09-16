@@ -16,7 +16,7 @@ public abstract class PlatformContainerScreen<T extends AbstractContainerMenu> e
 		super(menu, inventory, title, imageWidth, imageHeight);
 	}
 
-	public Slot getSlotUnderMouse() {
+	public Slot getHoveredSlot() {
 		return hoveredSlot;
 	}
 

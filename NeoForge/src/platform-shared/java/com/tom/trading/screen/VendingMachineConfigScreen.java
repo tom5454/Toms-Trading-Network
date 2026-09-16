@@ -2,8 +2,6 @@ package com.tom.trading.screen;
 
 import java.util.EnumMap;
 
-import org.lwjgl.glfw.GLFW;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -21,6 +19,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+
+import com.mojang.blaze3d.platform.InputConstants;
 
 import com.tom.trading.Content;
 import com.tom.trading.TradingNetworkMod;
@@ -136,8 +136,8 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	@Override
 	public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
 		if(popup.mouseClick(mouseButtonEvent))return true;
-		Slot clicked = getSlotUnderMouse();
-		if(mouseButtonEvent.button() == 1 && clicked instanceof PhantomSlot && !clicked.getItem().isEmpty()) {
+		Slot clicked = getHoveredSlot();
+		if(mouseButtonEvent.button() == 3 && clicked instanceof PhantomSlot && !clicked.getItem().isEmpty()) {
 			int popupSlot = clicked.getContainerSlot();
 			boolean tagFilter = clicked.getItem().getItem() == Content.TAG_FILTER.get();
 			var tags = clicked.getItem().tags().toList();
@@ -183,11 +183,11 @@ public class VendingMachineConfigScreen extends AbstractFilteredScreen<VendingMa
 	@Override
 	public boolean keyPressed(KeyEvent keyEvent) {
 		if(popup.keyPressed(keyEvent))return true;
-		if (keyEvent.key() == 256) {
+		if (keyEvent.isEscape()) {
 			if(nameBox.isFocused())nameBox.setFocused(false);
 			else this.minecraft.player.closeContainer();
 			return true;
-		} else if(keyEvent.key() == GLFW.GLFW_KEY_TAB) {
+		} else if(keyEvent.key() == InputConstants.KEY_TAB) {
 			return super.keyPressed(keyEvent);
 		}
 

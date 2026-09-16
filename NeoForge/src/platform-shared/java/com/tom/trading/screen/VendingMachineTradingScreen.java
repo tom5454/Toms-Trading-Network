@@ -64,7 +64,7 @@ public class VendingMachineTradingScreen extends PlatformContainerScreen<Vending
 	@Override
 	protected List<Component> getTooltipFromContainerItem(ItemStack itemStack) {
 		List<Component> tooltip = new ArrayList<>(super.getTooltipFromContainerItem(itemStack));
-		Slot s = getSlotUnderMouse();
+		Slot s = getHoveredSlot();
 		if (s != null && s.getContainerSlot() < 8) {
 			if ((menu.matchNBT & (1 << s.getContainerSlot())) == 0) {
 				tooltip.add(Component.translatable("tooltip.toms_trading_network.ignoredNBT").withStyle(ChatFormatting.WHITE));

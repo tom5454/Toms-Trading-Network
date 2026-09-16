@@ -13,7 +13,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
@@ -26,15 +25,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-import com.mojang.serialization.MapCodec;
-
 import com.tom.trading.tile.OwnableBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntity;
 import com.tom.trading.tile.VendingMachineBlockEntityBase;
 
 public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActivatableBlock {
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-	public static final MapCodec<VendingMachineBlock> CODEC = ChestBlock.simpleCodec(VendingMachineBlock::new);
 
 	public VendingMachineBlock(Block.Properties pr) {
 		super(pr);
@@ -94,11 +90,6 @@ public class VendingMachineBlock extends BaseEntityBlock implements AlwaysActiva
 	protected void affectNeighborsAfterRemoval(BlockState p_394424_, ServerLevel p_394241_, BlockPos p_393520_,
 			boolean p_394545_) {
 		Containers.updateNeighboursAfterDestroy(p_394424_, p_394241_, p_393520_);
-	}
-
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
 	}
 
 	@Override
